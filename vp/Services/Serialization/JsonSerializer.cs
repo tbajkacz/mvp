@@ -9,7 +9,7 @@ namespace vp.Services.Serialization
 {
     public class JsonSerializer : ISerializer
     {
-        public string Serialize<T>(object obj)
+        public string Serialize(object obj)
         {
             return JsonConvert.SerializeObject(obj);
         }
