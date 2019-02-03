@@ -22,6 +22,7 @@ namespace vp.Services.Playlists
         public void SavePlaylists(PlaylistCollection playlistCollection)
         {
             _userSettings.PlaylistCollection = playlistCollection;
+            _userSettings.SaveChanges();
         }
 
         public PlaylistCollection GetPlaylists()
@@ -32,12 +33,13 @@ namespace vp.Services.Playlists
         public void UpdatePlaylist(Playlist playlist)
         {
             var playlistCollection = _userSettings.PlaylistCollection;
-            if (playlistCollection != null)
+            if (playlistCollection != null && playlist != null)
             {
                 Playlist retrievedPlaylist = playlistCollection.FirstOrDefault(p => p.PlaylistTitle == playlist.PlaylistTitle);
                 if (retrievedPlaylist != null)
                 {
-                    
+                    playlistCollection[playlistCollection.IndexOf(retrievedPlaylist)] = playlist;
+                    _userSettings.SaveChanges();
                 }
             }
         }
