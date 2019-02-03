@@ -36,7 +36,7 @@ namespace vp.Services.Settings
 
         public void SaveChanges()
         {
-            Properties.UserSettings.Default.PlaylistCollection = _serializer.Serialize<PlaylistCollection>(PlaylistCollection);
+            Properties.UserSettings.Default.PlaylistCollection = _serializer.Serialize(PlaylistCollection);
             Properties.UserSettings.Default.Save();
         }
     }
