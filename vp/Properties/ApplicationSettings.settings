@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="vp.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="FFmpegPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">..\FFmpeg</Value>
+    </Setting>
+    <Setting Name="SupportedVideoFormats" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Video files |*.wmv; *.amv; *.avi; *.divx; *.flv; *.mkv; *.mov; *.mp4;</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
