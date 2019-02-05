@@ -8,7 +8,25 @@
         mc:Ignorable="d"
         Title="MainViewModelWindow" Height="450" Width="800"
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}">
+
+    <Window.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Open Test Video" Command="{Binding Source={StaticResource Locator}, Path=MediaViewModel.OpenVideoCommand}"/>
+        </ContextMenu>
+    </Window.ContextMenu>
+
     <Grid>
-        <usercontrols:Media/>
+
+        <TabControl>
+            <TabItem Header="Player"
+                 Visibility="Visible">
+                <usercontrols:Media/>
+            </TabItem>
+
+            <TabItem Header="Playlists"
+                 Visibility="Visible">
+                <usercontrols:Playlists/>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

@@ -34,5 +34,17 @@ namespace vp.Properties {
                 this["PlaylistCollection"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        public double Volume {
+            get {
+                return ((double)(this["Volume"]));
+            }
+            set {
+                this["Volume"] = value;
+            }
+        }
     }
 }

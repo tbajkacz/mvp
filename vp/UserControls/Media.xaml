@@ -5,9 +5,61 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:vp.UserControls"
              xmlns:ffme="clr-namespace:Unosquare.FFME;assembly=ffme.win"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:command="http://www.galasoft.ch/mvvmlight"
+             xmlns:settings="clr-namespace:vp.Services.Settings"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             x:Name="MediaService"
+             DataContext="{Binding Source={StaticResource Locator}, Path=MediaViewModel}">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <command:EventToCommand Command="{Binding InitializeMediaServiceCommand}"
+                                    CommandParameter="{Binding ElementName=MediaService}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+
+
     <Grid>
-        <ffme:MediaElement/>
+        <ffme:MediaElement x:Name="MediaPlayer" 
+                           Background="Gray"
+                           LoadedBehavior="Play"
+                           UnloadedBehavior="Manual"
+                           MediaOpened="MediaPlayer_OnMediaOpened"
+                           Volume="{Binding Volume, UpdateSourceTrigger=PropertyChanged}"
+                           />
+
+        <StatusBar Height="60"
+                   VerticalAlignment="Bottom"
+                   Background="Blue"
+                   Opacity="0.5">
+
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="1"
+                           HorizontalAlignment="Center">
+                <Slider Value="{Binding Volume, Converter={StaticResource MediaElementToSliderVolumeConverter}, Mode=TwoWay}"
+                        Maximum="{x:Static settings:ApplicationConstants.VolumeSliderMaxValue}"
+                        Width="100"/>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="2"
+                           HorizontalAlignment="Center">
+                <Button Content="Play" 
+                        Command="{Binding PlayPauseVideoCommand}"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </UserControl>

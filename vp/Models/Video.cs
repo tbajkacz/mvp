@@ -56,21 +56,18 @@ namespace vp.Models
         }
 
 
-        private Video()
+        public Video()
         {
 
         }
 
-        public static Video CreateFromPath(string path)
+        public Video(string path)
         {
-            Video video = new Video();
-            video.Path = path;
-            video.Name = System.IO.Path.GetFileNameWithoutExtension(path);
-            video.Length = video.GetDuration().TotalSeconds;
-            video.TimeWatched = 0;
-            video.Finished = false;
-
-            return video;
+            Path = path;
+            Name = System.IO.Path.GetFileNameWithoutExtension(path);
+            Length = this.GetDuration().TotalSeconds;
+            TimeWatched = 0;
+            Finished = false;
         }
     }
 }

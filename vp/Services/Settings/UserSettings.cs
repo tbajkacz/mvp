@@ -9,35 +9,35 @@ using vp.Services.Serialization;
 
 namespace vp.Services.Settings
 {
-    public class UserSettings : ObservableObject, IUserSettings
+    public class UserSettings : IUserSettings
     {
         private readonly ISerializer _serializer;
-        private PlaylistCollection _playlistCollection;
 
         public PlaylistCollection PlaylistCollection
         {
-            get => _playlistCollection;
-            set { Set(() => PlaylistCollection, ref _playlistCollection, value); }
+            get => _serializer.Deserialize<PlaylistCollection>(Properties.UserSettings.Default.PlaylistCollection);
+            set => Properties.UserSettings.Default.PlaylistCollection = _serializer.Serialize(value);
+        }
+
+        public double Volume
+        {
+            get => Properties.UserSettings.Default.Volume;
+            set => Properties.UserSettings.Default.Volume = value;
         }
 
         public UserSettings(ISerializer serializer)
         {
             _serializer = serializer;
-            InitializeProperties();
-        }
-
-        /// <summary>
-        /// Initializes private backing fields of each property
-        /// </summary>
-        private void InitializeProperties()
-        {
-            _playlistCollection = _serializer.Deserialize<PlaylistCollection>(Properties.UserSettings.Default.PlaylistCollection);
         }
 
         public void SaveChanges()
         {
-            Properties.UserSettings.Default.PlaylistCollection = _serializer.Serialize(PlaylistCollection);
             Properties.UserSettings.Default.Save();
+        }
+
+        ~UserSettings()
+        {
+            SaveChanges();
         }
     }
 }

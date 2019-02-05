@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,26 +9,30 @@ using vp.Models;
 namespace vp.Services.Playlists
 {
     /// <summary>
-    /// Used to save and retrieve playlists state
+    /// Used to manage a single <see cref="Playlist"/>
     /// </summary>
-    public interface IPlaylistManager
+    public interface IPlaylistManager : INotifyPropertyChanged
     {
         /// <summary>
-        /// Saves the provided <see cref="PlaylistCollection"/>
+        /// Currently managed <see cref="Playlist"/>, new if none specified
         /// </summary>
-        /// <param name="playlistCollection"></param>
-        void SavePlaylists(PlaylistCollection playlistCollection);
+        Playlist CurrentPlaylist { get; set; }
 
         /// <summary>
-        /// Retrieves the main <see cref="PlaylistCollection"/>
+        /// Contains current <see cref="Video"/>, null if not available
+        /// </summary>
+        Video CurrentVideo { get; }
+
+        /// <summary>
+        /// Sets <see cref="CurrentVideo"/> and returns the next <see cref="Video"/>, null if not available
         /// </summary>
         /// <returns></returns>
-        PlaylistCollection GetPlaylists();
+        Video Next();
 
         /// <summary>
-        /// Updates the provided <see cref="Playlist"/>
+        /// Sets <see cref="CurrentVideo"/> and returns the previous <see cref="Video"/>, null if not available
         /// </summary>
-        /// <param name="playlist"></param>
-        void UpdatePlaylist(Playlist playlist);
+        /// <returns></returns>
+        Video Prev();
     }
 }

@@ -19,5 +19,21 @@ namespace vp.Models
         {
 
         }
+
+        /// <summary>
+        /// Creates a new <see cref="Playlist"/> and adds it to the collection
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        public Playlist Create(string title)
+        {
+            Playlist playlist = new Playlist();
+            playlist.PlaylistTitle = title;
+            playlist.CurrentlyPlayingId = 0;
+
+            this.Add(playlist);
+
+            return playlist;
+        }
     }
 }

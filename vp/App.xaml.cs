@@ -5,6 +5,10 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Navigation;
+using GalaSoft.MvvmLight.Ioc;
+using vp.Services.Settings;
+using vp.ViewModel;
 
 namespace vp
 {
@@ -13,9 +17,10 @@ namespace vp
     /// </summary>
     public partial class App : Application
     {
-        private void OnStartup(object sender, StartupEventArgs e)
+        private void OnActivated(object sender, EventArgs e)
         {
-            Unosquare.FFME.MediaElement.FFmpegDirectory = vp.Properties.ApplicationSettings.Default.FFmpegPath;
+            //FFmpeg version 4.0 required
+            Unosquare.FFME.MediaElement.FFmpegDirectory = ApplicationConstants.FFmpegPath;
         }
     }
 }

@@ -12,9 +12,10 @@
   See http://www.galasoft.ch/mvvm
 */
 
-using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Views;
+using vp.Services.Dialogs;
 using vp.Services.Playlists;
 using vp.Services.Serialization;
 using vp.Services.Settings;
@@ -32,34 +33,30 @@ namespace vp.ViewModel
         /// </summary>
         public ViewModelLocator()
         {
-            ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-
             SimpleIoc.Default.Register<ISerializer, JsonSerializer>();
-            SimpleIoc.Default.Register<IApplicationSettings, ApplicationSettings>();
-            SimpleIoc.Default.Register<IUserSettings, UserSettings>();
             SimpleIoc.Default.Register<IPlaylistManager, PlaylistManager>();
+            SimpleIoc.Default.Register<IPlaylistCollectionManager, PlaylistCollectionManager>();
+            SimpleIoc.Default.Register<IFileDialogService, FileDialogService>();
 
-            ////if (ViewModelBase.IsInDesignModeStatic)
-            ////{
-            ////    // Create design time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DesignDataService>();
-            ////}
-            ////else
-            ////{
-            ////    // Create run time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DataService>();
-            ////}
+            //if (true)//ViewModelBase.IsInDesignModeStatic
+            //{
+                SimpleIoc.Default.Register<IUserSettings, MockUserSettings>();
+            //}
+            //else
+            //{
+                //SimpleIoc.Default.Register<IUserSettings, UserSettings>();
+            //}
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<MediaViewModel>();
+            SimpleIoc.Default.Register<PlaylistsViewModel>();
         }
 
-        public MainViewModel MainViewModel
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
-            }
-        }
+        public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>();
+
+        public MediaViewModel MediaViewModel => SimpleIoc.Default.GetInstance<MediaViewModel>();
+
+        public PlaylistsViewModel PlaylistsViewModel => SimpleIoc.Default.GetInstance<PlaylistsViewModel>();
         
         public static void Cleanup()
         {

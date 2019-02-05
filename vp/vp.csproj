@@ -35,17 +35,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net45\CommonServiceLocator.dll</HintPath>
+    <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.2.0.4\lib\net46\CommonServiceLocator.dll</HintPath>
     </Reference>
-    <Reference Include="ffme.common, Version=4.0.270.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FFME.Windows.4.0.270\lib\net461\ffme.common.dll</HintPath>
+    <Reference Include="ffme.common, Version=4.0.260.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FFME.Windows.4.0.260\lib\net461\ffme.common.dll</HintPath>
     </Reference>
-    <Reference Include="ffme.win, Version=2018.9.23.40367, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FFME.Windows.4.0.270\lib\net461\ffme.win.dll</HintPath>
+    <Reference Include="ffme.win, Version=2018.6.3.20580, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FFME.Windows.4.0.260\lib\net461\ffme.win.dll</HintPath>
     </Reference>
-    <Reference Include="FFmpeg.AutoGen, Version=4.0.0.4, Culture=neutral, PublicKeyToken=9b7632533a381715, processorArchitecture=MSIL">
-      <HintPath>..\packages\FFmpeg.AutoGen.4.0.0.4\lib\net45\FFmpeg.AutoGen.dll</HintPath>
+    <Reference Include="FFmpeg.AutoGen, Version=4.1.0.2, Culture=neutral, PublicKeyToken=9b7632533a381715, processorArchitecture=MSIL">
+      <HintPath>..\packages\FFmpeg.AutoGen.4.1.0.2\lib\net45\FFmpeg.AutoGen.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
@@ -89,6 +89,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\Playlists.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Window\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -97,27 +101,42 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\DataProxy.cs" />
+    <Compile Include="Controls\ListViewExtended.cs" />
+    <Compile Include="Converters\MediaElementToSliderVolumeConverter.cs" />
+    <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
     <Compile Include="Extensions\VideoExtensions.cs" />
     <Compile Include="Models\Playlist.cs" />
     <Compile Include="Models\PlaylistCollection.cs" />
     <Compile Include="Models\Video.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\UserSettings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>UserSettings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Services\Dialogs\FileDialogService.cs" />
+    <Compile Include="Services\Dialogs\IFileDialogService.cs" />
+    <Compile Include="Services\Media\IMediaService.cs" />
+    <Compile Include="Services\Playlists\IPlaylistCollectionManager.cs" />
     <Compile Include="Services\Playlists\IPlaylistManager.cs" />
+    <Compile Include="Services\Playlists\PlaylistCollectionManager.cs" />
     <Compile Include="Services\Playlists\PlaylistManager.cs" />
     <Compile Include="Services\Serialization\ISerializer.cs" />
     <Compile Include="Services\Serialization\JsonSerializer.cs" />
-    <Compile Include="Services\Settings\IApplicationSettings.cs" />
-    <Compile Include="Services\Settings\ApplicationSettings.cs" />
+    <Compile Include="Services\Settings\ApplicationConstants.cs" />
     <Compile Include="Services\Settings\IUserSettings.cs" />
+    <Compile Include="Services\Settings\MockUserSettings.cs" />
     <Compile Include="Services\Settings\UserSettings.cs" />
     <Compile Include="UserControls\Media.xaml.cs">
       <DependentUpon>Media.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Playlists.xaml.cs">
+      <DependentUpon>Playlists.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\MediaViewModel.cs" />
+    <Compile Include="ViewModel\PlaylistsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="Window\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -133,20 +152,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\ApplicationSettings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ApplicationSettings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
-    <None Include="Properties\ApplicationSettings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>ApplicationSettings.Designer.cs</LastGenOutput>
-    </None>
     <None Include="Properties\UserSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>UserSettings.Designer.cs</LastGenOutput>
