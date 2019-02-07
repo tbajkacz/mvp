@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using vp.Models;
 
 namespace vp.Services.Settings
@@ -18,16 +14,18 @@ namespace vp.Services.Settings
         {
             get => new PlaylistCollection
             {
-                new Playlist {PlaylistTitle = "First", Videos = new ObservableCollection<Video>
+            #pragma warning disable 0618
+                new Playlist {PlaylistTitle = "First", Videos = new BindingList<Video>
                 {
                     new Video{Name = "First"}
                 }},
-                new Playlist {PlaylistTitle = "Second", Videos = new ObservableCollection<Video>
+                new Playlist {PlaylistTitle = "Second", Videos = new BindingList<Video>
                 {
                     new Video{Name = "First"},
                     new Video{Name = "Second"},
                     new Video{Name = "Third"}
                 }}
+            #pragma warning restore 0618
             };
             set
             {

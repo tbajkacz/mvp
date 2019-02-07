@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace vp.Services.Serialization
+﻿namespace vp.Services.Serialization
 {
     /// <summary>
     /// Used for serializing and deserializing objects into strings

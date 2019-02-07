@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using Newtonsoft.Json;
 
@@ -14,7 +9,7 @@ namespace vp.Models
     {
         private int? _currentlyPlayingId;
         private string _playlistTitle;
-        private ObservableCollection<Video> _videos;
+        private BindingList<Video> _videos;
 
         [JsonProperty("playlistTitle")]
         public string PlaylistTitle
@@ -24,7 +19,7 @@ namespace vp.Models
         }
 
         [JsonProperty("videos")]
-        public ObservableCollection<Video> Videos
+        public BindingList<Video> Videos
         {
             get => _videos;
             set { Set(() => Videos, ref _videos, value); }
@@ -40,7 +35,7 @@ namespace vp.Models
 
         public Playlist()
         {
-            Videos = new ObservableCollection<Video>();
+            Videos = new BindingList<Video>();
         }
 
     }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using vp.Models;
+﻿using vp.Models;
 
 namespace vp.Services.Settings
 {
@@ -18,7 +13,7 @@ namespace vp.Services.Settings
         void SaveChanges();
 
         /// <summary>
-        /// Main <see cref="PlaylistCollection"/> of the application
+        /// Main <see cref="PlaylistCollection"/>, get returns a copy of it
         /// </summary>
         PlaylistCollection PlaylistCollection { get; set; }
 

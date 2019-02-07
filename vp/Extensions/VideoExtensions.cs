@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MediaToolkit;
 using MediaToolkit.Model;
 using vp.Models;
@@ -18,6 +14,7 @@ namespace vp.Extensions
         /// <returns></returns>
         public static TimeSpan GetDuration(this Video video)
         {
+            //TODO REPLACE THIS - really slow
             MediaFile inputFile = new MediaFile { Filename = video.Path };
             using (var engine = new Engine())
             {

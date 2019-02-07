@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using Newtonsoft.Json;
 using vp.Extensions;
@@ -55,7 +49,7 @@ namespace vp.Models
             set { Set(() => Finished, ref _finished, value); }
         }
 
-
+        [Obsolete("Videos should be created using the Video(string path) constructor")]
         public Video()
         {
 

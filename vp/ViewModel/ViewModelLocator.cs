@@ -15,6 +15,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
+using MahApps.Metro.Controls.Dialogs;
 using vp.Services.Dialogs;
 using vp.Services.Playlists;
 using vp.Services.Serialization;
@@ -31,21 +32,23 @@ namespace vp.ViewModel
         /// <summary>
         /// Initializes a new instance of the ViewModelLocator class.
         /// </summary>
-        public ViewModelLocator()
+        static ViewModelLocator()
         {
             SimpleIoc.Default.Register<ISerializer, JsonSerializer>();
             SimpleIoc.Default.Register<IPlaylistManager, PlaylistManager>();
             SimpleIoc.Default.Register<IPlaylistCollectionManager, PlaylistCollectionManager>();
             SimpleIoc.Default.Register<IFileDialogService, FileDialogService>();
-
-            //if (true)//ViewModelBase.IsInDesignModeStatic
-            //{
+            
+            if (ViewModelBase.IsInDesignModeStatic)
+            {
                 SimpleIoc.Default.Register<IUserSettings, MockUserSettings>();
-            //}
-            //else
-            //{
-                //SimpleIoc.Default.Register<IUserSettings, UserSettings>();
-            //}
+            }
+            else
+            {
+                //Visual studio designer has a problem with IDialogCoordinator
+                SimpleIoc.Default.Register<IDialogCoordinator>(() => DialogCoordinator.Instance);
+                SimpleIoc.Default.Register<IUserSettings, UserSettings>();
+            }
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<MediaViewModel>();
@@ -57,7 +60,7 @@ namespace vp.ViewModel
         public MediaViewModel MediaViewModel => SimpleIoc.Default.GetInstance<MediaViewModel>();
 
         public PlaylistsViewModel PlaylistsViewModel => SimpleIoc.Default.GetInstance<PlaylistsViewModel>();
-        
+
         public static void Cleanup()
         {
             // TODO Clear the ViewModels

@@ -1,24 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Unosquare.FFME.Events;
-using vp.Annotations;
 using vp.Models;
 using vp.Services.Media;
-using vp.Services.Settings;
-using vp.ViewModel;
 
 namespace vp.UserControls
 {
@@ -30,6 +14,9 @@ namespace vp.UserControls
         public Media()
         {
             InitializeComponent();
+            //bug? This is required(atleast on my pc) because DirectSound seems to be failing for some reason
+            //https://github.com/unosquare/ffmediaelement/issues/319
+            MediaPlayer.RendererOptions.UseLegacyAudioOut = true;
         }
 
         public async Task Play()
@@ -59,16 +46,7 @@ namespace vp.UserControls
 
         private void MediaPlayer_OnMediaOpened(object sender, RoutedEventArgs e)
         {
-            MediaPlayer.Volume = ((MediaViewModel) DataContext).Volume;
-            ((MediaViewModel) DataContext).PropertyChanged += VolumePropertyChanged;
-        }
-        //TODO ...remove when 4.0.270 ffme works
-        private void VolumePropertyChanged(object s, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(MediaViewModel.Volume))
-            {
-                MediaPlayer.Volume = ((MediaViewModel)DataContext).Volume;
-            }
+            
         }
     }
 }

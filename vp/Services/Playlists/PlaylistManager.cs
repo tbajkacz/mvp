@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using vp.Models;
-using vp.Services.Serialization;
-using vp.Services.Settings;
 
 namespace vp.Services.Playlists
 {

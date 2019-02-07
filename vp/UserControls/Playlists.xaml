@@ -6,22 +6,27 @@
              xmlns:local="clr-namespace:vp.UserControls"
              xmlns:models="clr-namespace:vp.Models"
              xmlns:converters="clr-namespace:vp.Converters"
-             xmlns:controls="clr-namespace:vp.Controls"
              mc:Ignorable="d" 
+             xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
              d:DesignHeight="450" d:DesignWidth="800"
-             DataContext="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel}">
+             DataContext="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel}"
+             dialog:DialogParticipation.Register="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+             >
 
     <Grid>
+
         <Grid.Resources>
+            <converters:SelectedItemToBoolConverter x:Key="SelectedItemToBoolConverter"/>
             <ContextMenu x:Key="PlaylistsColumnContextMenu">
                 <MenuItem Header="Add"
                           Command="{Binding AddPlaylistCommand}"/>
             </ContextMenu>
             <ContextMenu x:Key="VideosColumnContextMenu">
                 <MenuItem Header="Add"
-                          Command="{Binding AddVideoCommand}"
-                          CommandParameter="{Binding Source={x:Reference Name=PlaylistListView}, Path=SelectedItem}"
-                          IsEnabled="{Binding Source={x:Reference Name=PlaylistListView}, Path=IsItemSelected}"/>
+                          Command="{Binding AddVideosCommand}"
+                          CommandParameter="{Binding Source={x:Reference Name=PlaylistDataGrid}, Path=SelectedItem}"
+                          IsEnabled="{Binding Source={x:Reference Name=PlaylistDataGrid}, Path=SelectedItem, Converter={StaticResource SelectedItemToBoolConverter}}"/>
             </ContextMenu>
         </Grid.Resources>
 
@@ -35,9 +40,44 @@
                 Content="-"
                 Height="30"
                 Width="30"
-                VerticalAlignment="Top"/>
+                VerticalAlignment="Top"
+                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"/>
 
-        <controls:ListViewExtended x:Name="PlaylistListView"
+        <DataGrid Name="PlaylistDataGrid"
+                  Grid.Column="1"
+                  ItemsSource="{Binding PlaylistCollection}"
+                  ContextMenu="{StaticResource PlaylistsColumnContextMenu}"
+                  AutoGenerateColumns="False"
+                  CanUserResizeColumns="False"
+                  IsReadOnly="True"
+                  mah:DataGridRowHelper.SelectionUnit="FullRow"
+                  CanUserReorderColumns="False"
+                  SelectedItem="{Binding SelectedPlaylist, Mode=OneWayToSource}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Playlist"
+                                    Binding="{Binding PlaylistTitle}"
+                                    Width="*"/>
+            </DataGrid.Columns>
+
+            <DataGrid.Resources>
+                <ContextMenu x:Key="DataRowContextMenu">
+                    <MenuItem Header="Rename" 
+                              Command="{Binding Source={StaticResource Locator},  Path=PlaylistsViewModel.RenamePlaylistCommand}"
+                              CommandParameter="{Binding Source={x:Reference PlaylistDataGrid}, Path=SelectedItem}"/>
+                    <MenuItem Header="Remove"
+                              Command="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel.RemovePlaylistsCommand}"
+                              CommandParameter="{Binding Source={x:Reference PlaylistDataGrid}, Path=SelectedItems}"/>
+                </ContextMenu>
+            </DataGrid.Resources>
+
+            <DataGrid.RowStyle>
+                <!--Without BasedOn row becomes white on right click-->
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource MetroDataGridRow}">
+                    <Setter Property="ContextMenu" Value="{StaticResource DataRowContextMenu}" />
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+        <!--<controls:ListViewExtended x:Name="PlaylistListView"
                                    Grid.Column="1"
                                    ItemsSource="{Binding PlaylistCollection}"
                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -49,14 +89,14 @@
                                     DisplayMemberBinding="{Binding PlaylistTitle}"/>
                 </GridView>
             </ListView.View>
-        </controls:ListViewExtended>
+        </controls:ListViewExtended>-->
 
-        <ListView Name="VideosListView"
+        <!--<ListView Name="VideosListView"
                   Grid.Column="2"
                   ItemsSource="{Binding ElementName=PlaylistListView, Path=SelectedItem.Videos}"
                   ContextMenu="{StaticResource VideosColumnContextMenu}">
             <ListView.View>
-                <GridView>
+                <GridView AllowsColumnReorder="False">
                     <GridViewColumn Header="Name">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -67,8 +107,40 @@
                 </GridView>
             </ListView.View>
 
-        </ListView>
+        </ListView>-->
 
+        <DataGrid Name="VideosDataGrid"
+                  Grid.Column="2"
+                  ItemsSource="{Binding ElementName=PlaylistDataGrid, Path=SelectedItem.Videos}"
+                  ContextMenu="{StaticResource VideosColumnContextMenu}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  mah:DataGridRowHelper.SelectionUnit="FullRow"
+                  CanUserReorderColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name"
+                                    Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Length"
+                                    Binding="{Binding Length}"/>
+                <DataGridTextColumn Header="Progress"
+                                    Binding="{Binding TimeWatched}"/>
+            </DataGrid.Columns>
+
+            <DataGrid.Resources>
+                <ContextMenu x:Key="DataRowContextMenu">
+                    <MenuItem Header="Remove"
+                              Command="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel.RemoveVideosCommand}"
+                              CommandParameter="{Binding Source={x:Reference VideosDataGrid}, Path=SelectedItems}"/>
+                </ContextMenu>
+            </DataGrid.Resources>
+
+            <DataGrid.RowStyle>
+                <!--Without BasedOn row becomes white on right click-->
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource MetroDataGridRow}">
+                    <Setter Property="ContextMenu" Value="{StaticResource DataRowContextMenu}" />
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
 
 
     </Grid>

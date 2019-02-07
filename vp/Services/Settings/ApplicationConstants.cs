@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 
 namespace vp.Services.Settings
 {
@@ -15,5 +9,11 @@ namespace vp.Services.Settings
         public static double VolumeSliderMaxValue => 100;
 
         public static string FileDialogFilters => "Video files |*.wmv; *.avi; *.flv; *.mp4;";
+
+        //{get;} = is evaluated only once, => on each request
+        public static string[] SupportedVideoExtensions { get; } = FileDialogFilters.Remove(0, FileDialogFilters.IndexOf("|") + 1)
+            .Replace("*", string.Empty).Replace(";", string.Empty).Split(' ');
+
+        public static TimeSpan AutoSaveTimeSpan => TimeSpan.FromSeconds(1);
     }
 }
