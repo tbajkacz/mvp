@@ -1,12 +1,16 @@
 ﻿using System;
-using MediaToolkit;
-using MediaToolkit.Model;
+using System.IO;
+using Unosquare.FFME;
 using vp.Models;
-
+using Unosquare.FFME.Shared;
 namespace vp.Extensions
 {
     public static class VideoExtensions
     {
+        static VideoExtensions()
+        {
+            MediaEngine.LoadFFmpeg();
+        }
         /// <summary>
         /// Gets the length of a <see cref="Video"/>
         /// </summary>
@@ -14,13 +18,8 @@ namespace vp.Extensions
         /// <returns></returns>
         public static TimeSpan GetDuration(this Video video)
         {
-            //TODO REPLACE THIS - really slow
-            MediaFile inputFile = new MediaFile { Filename = video.Path };
-            using (var engine = new Engine())
-            {
-                engine.GetMetadata(inputFile);
-            }
-            return inputFile.Metadata.Duration;
+            MediaInfo info = MediaEngine.RetrieveMediaInfo(video.Path);
+            return info.Duration;
         }
     }
 }

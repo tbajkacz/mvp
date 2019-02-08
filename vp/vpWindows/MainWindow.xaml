@@ -8,7 +8,8 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
         Title="MainViewModelWindow" Height="450" Width="800"
-        DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}">
+        DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
+                 WindowStyle="SingleBorderWindow">
 
     <Window.ContextMenu>
         <ContextMenu>

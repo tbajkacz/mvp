@@ -58,9 +58,11 @@
                                     Binding="{Binding PlaylistTitle}"
                                     Width="*"/>
             </DataGrid.Columns>
-
             <DataGrid.Resources>
                 <ContextMenu x:Key="DataRowContextMenu">
+                    <MenuItem Header="Play"
+                              Command="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel.PlayPlaylistCommand}"
+                              CommandParameter="{Binding Source={x:Reference PlaylistDataGrid}, Path=SelectedItem}"/>
                     <MenuItem Header="Rename" 
                               Command="{Binding Source={StaticResource Locator},  Path=PlaylistsViewModel.RenamePlaylistCommand}"
                               CommandParameter="{Binding Source={x:Reference PlaylistDataGrid}, Path=SelectedItem}"/>
@@ -128,6 +130,9 @@
 
             <DataGrid.Resources>
                 <ContextMenu x:Key="DataRowContextMenu">
+                    <MenuItem Header="Play"
+                              Command="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel.PlayVideoCommand}"
+                              CommandParameter="{Binding Source={x:Reference VideosDataGrid}, Path=SelectedItem}"/>
                     <MenuItem Header="Remove"
                               Command="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel.RemoveVideosCommand}"
                               CommandParameter="{Binding Source={x:Reference VideosDataGrid}, Path=SelectedItems}"/>

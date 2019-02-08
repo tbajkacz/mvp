@@ -45,6 +45,8 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
@@ -57,8 +59,24 @@
             </StatusBarItem>
             <StatusBarItem Grid.Column="2"
                            HorizontalAlignment="Center">
+                <Button Content="Prev"
+                        Command="{Binding PrevVideoCommand}"/>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="3"
+                           HorizontalAlignment="Center">
                 <Button Content="Play" 
                         Command="{Binding PlayPauseVideoCommand}"/>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="4"
+                           HorizontalAlignment="Center">
+                <Button Content="Next"
+                        Command="{Binding NextVideoCommand}"/>
+            </StatusBarItem>
+
+            <StatusBarItem Grid.Column="6"
+                           HorizontalAlignment="Center">
+                <Button Content="Fullscreen"
+                        Command="{Binding FullscreenCommand}"/>
             </StatusBarItem>
         </StatusBar>
     </Grid>

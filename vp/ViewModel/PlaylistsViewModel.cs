@@ -7,7 +7,9 @@ using System.Windows;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using MahApps.Metro.Controls.Dialogs;
+using vp.Messaging;
 using vp.Models;
 using vp.Services.Dialogs;
 using vp.Services.Settings;
@@ -62,6 +64,10 @@ namespace vp.ViewModel
         /// </summary>
         public RelayCommand<IEnumerable> RemoveVideosCommand { get; private set; }
 
+        public RelayCommand<Playlist> PlayPlaylistCommand { get; private set; }
+
+        public RelayCommand<Video> PlayVideoCommand { get; private set; }
+
         #endregion
 
         public PlaylistsViewModel(IUserSettings userSettings,
@@ -79,12 +85,24 @@ namespace vp.ViewModel
             RenamePlaylistCommand = new RelayCommand<Playlist>(OnRenamePlaylist);
             RemovePlaylistsCommand = new RelayCommand<IEnumerable>(OnRemovePlaylists);
             RemoveVideosCommand = new RelayCommand<IEnumerable>(OnRemoveVideos);
+            PlayPlaylistCommand = new RelayCommand<Playlist>(OnPlayPlaylist);
+            PlayVideoCommand = new RelayCommand<Video>(OnPlayVideo);
 
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = ApplicationConstants.AutoSaveTimeSpan;
             timer.Tick += SaveChanges;
             timer.Start();
             PlaylistCollection.ListChanged += SaveChanges;
+        }
+
+        private void OnPlayVideo(Video video)
+        {
+            Messenger.Default.Send(new PlayVideoMessage(SelectedPlaylist, video));
+        }
+
+        private void OnPlayPlaylist(Playlist playlist)
+        {
+            Messenger.Default.Send(new PlayPlaylistMessage(playlist));
         }
 
         #region Command Handlers

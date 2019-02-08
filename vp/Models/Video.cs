@@ -9,7 +9,7 @@ namespace vp.Models
     {
         private string _path;
         private string _name;
-        private double _length;
+        private TimeSpan _length;
         private double _timeWatched;
         private bool _finished;
 
@@ -29,7 +29,7 @@ namespace vp.Models
         }
 
         [JsonProperty("length")]
-        public double Length
+        public TimeSpan Length
         {
             get => _length;
             set { Set(() => Length, ref _length, value); }
@@ -59,8 +59,7 @@ namespace vp.Models
         {
             Path = path;
             Name = System.IO.Path.GetFileNameWithoutExtension(path);
-            Length = this.GetDuration().TotalSeconds;
-            TimeWatched = 0;
+            Length = this.GetDuration();
             Finished = false;
         }
     }
