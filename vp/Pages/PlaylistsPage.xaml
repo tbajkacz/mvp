@@ -1,24 +1,20 @@
-﻿<UserControl x:Class="vp.UserControls.Playlists"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:vp.UserControls"
-             xmlns:models="clr-namespace:vp.Models"
-             xmlns:converters="clr-namespace:vp.Converters"
-             mc:Ignorable="d" 
-             xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-             xmlns:dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
-             d:DesignHeight="450" d:DesignWidth="800"
-             DataContext="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel}"
-             dialog:DialogParticipation.Register="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
-             >
+﻿<Page x:Class="vp.Pages.PlaylistsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:vp.UserControls"
+      xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+      xmlns:dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+      xmlns:converters="clr-namespace:vp.Converters"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PlaylistsPage">
 
-    <Grid>
-
+    <!--<Gr
+id>
         <Grid.Resources>
             <converters:SelectedItemToBoolConverter x:Key="SelectedItemToBoolConverter"/>
-            <converters:TimeWatchedAndDurationToPercentageConverter x:Key="TimeWatchedAndDurationToPercentageConverter"/>
             <ContextMenu x:Key="PlaylistsColumnContextMenu">
                 <MenuItem Header="Add"
                           Command="{Binding AddPlaylistCommand}"/>
@@ -75,10 +71,10 @@
             </DataGrid.Resources>
 
             <DataGrid.RowStyle>
-                <!--Without BasedOn row becomes white on right click-->
+                -->
+    <!--Without BasedOn row becomes white on right click--><!--
                 <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource MetroDataGridRow}">
                     <Setter Property="ContextMenu" Value="{StaticResource DataRowContextMenu}" />
-                    <Setter Property="Visibility" Value="Visible"></Setter>
                 </Style>
             </DataGrid.RowStyle>
 
@@ -88,6 +84,39 @@
                               CommandParameter="{Binding ElementName=PlaylistDataGrid, Path=SelectedItem}"/>
             </DataGrid.InputBindings>
         </DataGrid>
+        -->
+    <!--<controls:ListViewExtended x:Name="PlaylistListView"
+                                   Grid.Column="1"
+                                   ItemsSource="{Binding PlaylistCollection}"
+                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                   ContextMenu="{StaticResource PlaylistsColumnContextMenu}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Playlists" 
+                                    Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListView}, Path=ActualWidth}"
+                                    DisplayMemberBinding="{Binding PlaylistTitle}"/>
+                </GridView>
+            </ListView.View>
+        </controls:ListViewExtended>-->
+
+        <!--<ListView Name="VideosListView"
+                  Grid.Column="2"
+                  ItemsSource="{Binding ElementName=PlaylistListView, Path=SelectedItem.Videos}"
+                  ContextMenu="{StaticResource VideosColumnContextMenu}">
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn Header="Name">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+
+        </ListView>-->
+    <!--
 
         <DataGrid Name="VideosDataGrid"
                   Grid.Column="2"
@@ -99,21 +128,11 @@
                   CanUserReorderColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name"
-                                    Binding="{Binding Name}"
-                                    Width="5*"/>
+                                    Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Length"
-                                    Binding="{Binding Length}"
-                                    Width="*"/>
+                                    Binding="{Binding Length}"/>
                 <DataGridTextColumn Header="Progress"
-                                    Width="*">
-                    <DataGridTextColumn.Binding>
-                        <MultiBinding Converter="{StaticResource TimeWatchedAndDurationToPercentageConverter}"
-                                      StringFormat="{}{0}%">
-                            <Binding Path="TimeWatched"/>
-                            <Binding Path="Length"/>
-                        </MultiBinding>
-                    </DataGridTextColumn.Binding>
-                </DataGridTextColumn>
+                                    Binding="{Binding TimeWatched}"/>
             </DataGrid.Columns>
 
             <DataGrid.Resources>
@@ -128,7 +147,8 @@
             </DataGrid.Resources>
 
             <DataGrid.RowStyle>
-                <!--Without BasedOn row becomes white on right click-->
+                -->
+    <!--Without BasedOn row becomes white on right click--><!--
                 <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource MetroDataGridRow}">
                     <Setter Property="ContextMenu" Value="{StaticResource DataRowContextMenu}" />
                 </Style>
@@ -140,5 +160,9 @@
                               CommandParameter="{Binding ElementName=VideosDataGrid, Path=SelectedItem}"/>
             </DataGrid.InputBindings>
         </DataGrid>
+    </Grid>-->
+
+    <Grid>
+        <local:Playlists/>
     </Grid>
-</UserControl>
+</Page>

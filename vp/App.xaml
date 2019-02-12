@@ -16,6 +16,11 @@
                 <!-- Accent and AppTheme setting -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml"/>-->
+                <ResourceDictionary Source="Styles/MediaButtonStyle.xaml"/>
+                <ResourceDictionary Source="Styles/CurrentPlaylistDataGridStyle.xaml"/>
+                <ResourceDictionary Source="Styles/PositionSliderStyle.xaml"/>
+                <ResourceDictionary Source="Styles/VolumeSliderStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:vp.ViewModel" />
             <converters:MediaElementToSliderVolumeConverter x:Key="MediaElementToSliderVolumeConverter"/>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
+using vp.Events;
 using vp.Models;
 using vp.Services.Media;
 
@@ -17,6 +18,7 @@ namespace vp.UserControls
             //bug? This is required(atleast on my pc) because DirectSound seems to be failing for some reason
             //https://github.com/unosquare/ffmediaelement/issues/319
             MediaPlayer.RendererOptions.UseLegacyAudioOut = true;
+            MediaPlayer.MediaEnded += (s, e) => MediaEnded?.Invoke(s, e);
         }
 
         public async Task Play()
@@ -24,11 +26,13 @@ namespace vp.UserControls
             await MediaPlayer.Play();
         }
 
-        public async Task Open(Video video)
+        public async Task Open(Video video, TimeSpan? position)
         {
             if (video != null)
             {
                 await MediaPlayer.Open(new Uri(video.Path));
+                MediaPlayer.Position = position ?? TimeSpan.Zero;
+                MediaOpened?.Invoke(this, new MediaOpenedEventArgs(video));
             }
         }
 
@@ -43,6 +47,9 @@ namespace vp.UserControls
         }
 
         public bool IsPlaying => MediaPlayer.IsPlaying;
+
+        public event RoutedEventHandler MediaEnded;
+        public event EventHandler<MediaOpenedEventArgs> MediaOpened;
 
         private void MediaPlayer_OnMediaOpened(object sender, RoutedEventArgs e)
         {

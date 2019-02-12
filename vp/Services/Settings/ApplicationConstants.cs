@@ -14,6 +14,6 @@ namespace vp.Services.Settings
         public static string[] SupportedVideoExtensions { get; } = FileDialogFilters.Remove(0, FileDialogFilters.IndexOf("|") + 1)
             .Replace("*", string.Empty).Replace(";", string.Empty).Split(' ');
 
-        public static TimeSpan AutoSaveTimeSpan => TimeSpan.FromSeconds(1);
+        public static TimeSpan AutoSaveInterval => TimeSpan.FromSeconds(1);
     }
 }

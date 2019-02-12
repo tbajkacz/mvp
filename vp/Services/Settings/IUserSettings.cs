@@ -21,5 +21,15 @@ namespace vp.Services.Settings
         /// Current volume level set by the user
         /// </summary>
         double Volume { get; set; }
+
+        /// <summary>
+        /// Playlist which was playing during the previous instance of the app
+        /// </summary>
+        Playlist LastPlayedPlaylist { get; set; }
+
+        /// <summary>
+        /// Defines if the right DataGrid with CurrentPlayist was open or not
+        /// </summary>
+        bool IsOpenCurrentPlaylistPanel { get; set; }
     }
 }

@@ -46,5 +46,29 @@ namespace vp.Properties {
                 this["Volume"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastPlayedPlaylist {
+            get {
+                return ((string)(this["LastPlayedPlaylist"]));
+            }
+            set {
+                this["LastPlayedPlaylist"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsOpenCurrentPlaylistPanel {
+            get {
+                return ((bool)(this["IsOpenCurrentPlaylistPanel"]));
+            }
+            set {
+                this["IsOpenCurrentPlaylistPanel"] = value;
+            }
+        }
     }
 }

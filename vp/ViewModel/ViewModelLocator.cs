@@ -12,11 +12,14 @@
   See http://www.galasoft.ch/mvvm
 */
 
+using System;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
 using MahApps.Metro.Controls.Dialogs;
+using vp.Services.AppService;
 using vp.Services.Dialogs;
+using vp.Services.Navigation;
 using vp.Services.Playlists;
 using vp.Services.Serialization;
 using vp.Services.Settings;
@@ -38,7 +41,14 @@ namespace vp.ViewModel
             SimpleIoc.Default.Register<IPlaylistManager, PlaylistManager>();
             SimpleIoc.Default.Register<IPlaylistCollectionManager, PlaylistCollectionManager>();
             SimpleIoc.Default.Register<IFileDialogService, FileDialogService>();
+            SimpleIoc.Default.Register<IAppService, AppService>();
+            SimpleIoc.Default.Register<IPageNavigationService, PageNavigationService>();
+
             
+
+            SimpleIoc.Default.GetInstance<IPageNavigationService>().Register("MediaPage", new Uri("../Pages/MediaPage.xaml", UriKind.Relative), true);
+            SimpleIoc.Default.GetInstance<IPageNavigationService>().Register("PlaylistsPage", new Uri("../Pages/PlaylistsPage.xaml", UriKind.Relative));
+
             if (ViewModelBase.IsInDesignModeStatic)
             {
                 SimpleIoc.Default.Register<IUserSettings, MockUserSettings>();

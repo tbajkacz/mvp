@@ -8,6 +8,10 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:command="http://www.galasoft.ch/mvvmlight"
              xmlns:settings="clr-namespace:vp.Services.Settings"
+             xmlns:converters="clr-namespace:vp.Converters"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="MediaService"
@@ -20,64 +24,183 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-
+    <UserControl.Resources>
+        <converters:TimeSpanToDoubleConverter x:Key="TimeSpanToDoubleConverter"/>
+        <converters:TimeWatchedAndDurationToPercentageConverter x:Key="TimeWatchedAndDurationToPercentageConverter"/>
+    </UserControl.Resources>
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="test"
+                      Command="{Binding OpenVideoCommand}"></MenuItem>
+        </ContextMenu>
+    </UserControl.ContextMenu>
 
     <Grid>
         <ffme:MediaElement x:Name="MediaPlayer" 
-                           Background="Gray"
                            LoadedBehavior="Play"
                            UnloadedBehavior="Manual"
                            MediaOpened="MediaPlayer_OnMediaOpened"
                            Volume="{Binding Volume, UpdateSourceTrigger=PropertyChanged}"
-                           />
+                           Position="{Binding Position}"
+                           >
+            <ffme:MediaElement.Background>
+                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="#02013a" Offset="0.5"/>
+                    <GradientStop Color="Black" Offset="0.9"/>
+                </LinearGradientBrush>
+            </ffme:MediaElement.Background>
+        </ffme:MediaElement>
+        
+        <DockPanel LastChildFill="False">
+            <StackPanel Orientation="Vertical"
+                        DockPanel.Dock="Bottom">
 
-        <StatusBar Height="60"
-                   VerticalAlignment="Bottom"
-                   Background="Blue"
-                   Opacity="0.5">
+                <Slider 
+                    Maximum="{Binding ElementName=MediaPlayer, Path=NaturalDuration, Converter={StaticResource TimeSpanToDoubleConverter}}"
+                    TickFrequency="0.01"
+                    IsMoveToPointEnabled="True"
+                    Value="{Binding ElementName=MediaPlayer, Path=Position, Converter={StaticResource TimeSpanToDoubleConverter}}"
+                    Style="{DynamicResource PositionSliderStyle}">
+                </Slider>
 
-            <StatusBar.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-                </ItemsPanelTemplate>
-            </StatusBar.ItemsPanel>
-            <StatusBarItem Grid.Column="1"
-                           HorizontalAlignment="Center">
-                <Slider Value="{Binding Volume, Converter={StaticResource MediaElementToSliderVolumeConverter}, Mode=TwoWay}"
-                        Maximum="{x:Static settings:ApplicationConstants.VolumeSliderMaxValue}"
-                        Width="100"/>
-            </StatusBarItem>
-            <StatusBarItem Grid.Column="2"
-                           HorizontalAlignment="Center">
-                <Button Content="Prev"
-                        Command="{Binding PrevVideoCommand}"/>
-            </StatusBarItem>
-            <StatusBarItem Grid.Column="3"
-                           HorizontalAlignment="Center">
-                <Button Content="Play" 
-                        Command="{Binding PlayPauseVideoCommand}"/>
-            </StatusBarItem>
-            <StatusBarItem Grid.Column="4"
-                           HorizontalAlignment="Center">
-                <Button Content="Next"
-                        Command="{Binding NextVideoCommand}"/>
-            </StatusBarItem>
+                <StatusBar Height="60"
+                           VerticalAlignment="Bottom">
+                    <StatusBar.Background>
+                        <SolidColorBrush Color="Black"
+                                         Opacity="0.3"/>
+                    </StatusBar.Background>
+                    <StatusBar.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                        </ItemsPanelTemplate>
+                    </StatusBar.ItemsPanel>
 
-            <StatusBarItem Grid.Column="6"
+
+
+                    <StatusBarItem Grid.Column="0"
                            HorizontalAlignment="Center">
-                <Button Content="Fullscreen"
-                        Command="{Binding FullscreenCommand}"/>
-            </StatusBarItem>
-        </StatusBar>
+                        <Slider Value="{Binding Volume, Converter={StaticResource MediaElementToSliderVolumeConverter}, Mode=TwoWay}"
+                                Maximum="{x:Static settings:ApplicationConstants.VolumeSliderMaxValue}"
+                                Width="100"
+                                Style="{DynamicResource VolumeSliderStyle}"/>
+                    </StatusBarItem>
+                    <StatusBarItem Grid.Column="1"
+                           HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+
+                            <Button Command="{Binding PrevVideoCommand}"
+                                    Style="{DynamicResource UiButtonStyle}"
+                                    Margin="0 0 10 0">
+                                <fa:ImageAwesome Icon="Backward" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
+                            </Button>
+                            <Button Command="{Binding PlayPauseVideoCommand}"
+                                    Margin="0 0 10 0">
+                                <Button.Style>
+                                    <Style TargetType="Button"
+                                           BasedOn="{StaticResource UiButtonStyle}">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <fa:ImageAwesome Icon="Play" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=MediaPlayer, Path=IsPlaying}" Value="True">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <!--For some reason RelativeSource is not workign for the Foreground inside here-->
+                                                        <fa:ImageAwesome Icon="Pause" Foreground="{StaticResource ButtonForegroundBrush}"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            
+                            <Button Command="{Binding NextVideoCommand}"
+                                    Style="{DynamicResource UiButtonStyle}">
+                                <fa:ImageAwesome Icon="Forward" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
+                            </Button>
+                        </StackPanel>
+                    </StatusBarItem>
+
+                    <StatusBarItem Grid.Column="2"
+                                   HorizontalAlignment="Right"
+                                   Margin="0 0 50 0">
+                        <StackPanel Orientation="Horizontal">
+                            <ToggleButton Name="VisibilityToggleButton"
+                                          IsChecked="{Binding IsOpenCurrentPlaylistPanel}"
+                                          Style="{DynamicResource UiToggleButtonStyle}">
+                                <fa:ImageAwesome Icon="ArrowUp" Foreground="{Binding RelativeSource={RelativeSource AncestorType=ToggleButton}, Path=Foreground}"/>
+                            </ToggleButton>
+                            <Button Command="{Binding NavigateToPlaylistPageCommand}"
+                                    Style="{DynamicResource UiButtonStyle}">
+                                <fa:ImageAwesome Icon="Edit" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
+                            </Button>
+                            <Button Command="{Binding FullscreenCommand}"
+                                    Style="{DynamicResource UiButtonStyle}"
+                                    Padding="10">
+                                <fa:ImageAwesome Icon="ArrowsAlt" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
+                            </Button>
+                        </StackPanel>
+                    </StatusBarItem>
+
+                </StatusBar>
+            </StackPanel>
+            <DataGrid Name="PlaylistDataGrid" 
+                      DockPanel.Dock="Right"
+                      AutoGenerateColumns="False"
+                      ItemsSource="{Binding CurrentPlaylist.Videos}"
+                      IsReadOnly="True"
+                      CanUserReorderColumns="False"
+                      mah:DataGridRowHelper.SelectionUnit="FullRow"
+                      Style="{DynamicResource CurrentPlaylistDataGridStyle}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Video"
+                                        Binding="{Binding Name}"
+                                        Width="4*">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="{StaticResource DataGridBackgroundBrush}"/>
+                                <Setter Property="Padding" Value="4"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Progress"
+                                        Width="1.2*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource TimeWatchedAndDurationToPercentageConverter}"
+                                          StringFormat="{}{0}%">
+                                <Binding Path="TimeWatched"/>
+                                <Binding Path="Length"/>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="{StaticResource DataGridBackgroundBrush}" />
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DockPanel.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" 
+                              Command="{Binding OpenVideoCommand}"
+                              CommandParameter="{Binding ElementName=PlaylistDataGrid, Path=SelectedItem}"/>
+            </DockPanel.InputBindings>
+        </DockPanel>
     </Grid>
 </UserControl>

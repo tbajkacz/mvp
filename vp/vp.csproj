@@ -51,6 +51,9 @@
     <Reference Include="FFmpeg.AutoGen, Version=4.1.0.2, Culture=neutral, PublicKeyToken=9b7632533a381715, processorArchitecture=MSIL">
       <HintPath>..\packages\FFmpeg.AutoGen.4.1.0.2\lib\net45\FFmpeg.AutoGen.dll</HintPath>
     </Reference>
+    <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
+      <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
@@ -89,11 +92,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Styles\CurrentPlaylistDataGridStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\PositionSliderStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\MediaButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\VolumeSliderStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\Media.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\MediaPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\Playlists.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PlaylistsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -107,6 +134,9 @@
     </Compile>
     <Compile Include="Converters\MediaElementToSliderVolumeConverter.cs" />
     <Compile Include="Converters\SelectedItemToBoolConverter.cs" />
+    <Compile Include="Converters\TimeSpanToDoubleConverter.cs" />
+    <Compile Include="Converters\TimeWatchedAndDurationToPercentageConverter.cs" />
+    <Compile Include="Events\MediaOpenedEventArgs.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
     <Compile Include="Extensions\VideoExtensions.cs" />
     <Compile Include="Messaging\PlayPlaylistMessage.cs" />
@@ -120,9 +150,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>UserSettings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Services\AppService\AppService.cs" />
+    <Compile Include="Services\AppService\IAppService.cs" />
     <Compile Include="Services\Dialogs\FileDialogService.cs" />
     <Compile Include="Services\Dialogs\IFileDialogService.cs" />
     <Compile Include="Services\Media\IMediaService.cs" />
+    <Compile Include="Services\Navigation\IPageNavigationService.cs" />
+    <Compile Include="Services\Navigation\PageNavigationService.cs" />
     <Compile Include="Services\Playlists\IPlaylistCollectionManager.cs" />
     <Compile Include="Services\Playlists\IPlaylistManager.cs" />
     <Compile Include="Services\Playlists\PlaylistCollectionManager.cs" />
@@ -133,11 +167,18 @@
     <Compile Include="Services\Settings\IUserSettings.cs" />
     <Compile Include="Services\Settings\MockUserSettings.cs" />
     <Compile Include="Services\Settings\UserSettings.cs" />
+    <Compile Include="TriggerActions\SetPropertyAction.cs" />
     <Compile Include="UserControls\Media.xaml.cs">
       <DependentUpon>Media.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\MediaPage.xaml.cs">
+      <DependentUpon>MediaPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Playlists.xaml.cs">
       <DependentUpon>Playlists.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PlaylistsPage.xaml.cs">
+      <DependentUpon>PlaylistsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MediaViewModel.cs" />

@@ -12,6 +12,7 @@ using MahApps.Metro.Controls.Dialogs;
 using vp.Messaging;
 using vp.Models;
 using vp.Services.Dialogs;
+using vp.Services.Navigation;
 using vp.Services.Settings;
 
 namespace vp.ViewModel
@@ -21,6 +22,7 @@ namespace vp.ViewModel
         private readonly IUserSettings _userSettings;
         private readonly IFileDialogService _fileDialogService;
         private readonly IDialogCoordinator _dialogCoordinator;
+        private readonly IPageNavigationService _pageNavigationService;
         private PlaylistCollection _playlistCollection;
 
         /// <summary>
@@ -42,41 +44,45 @@ namespace vp.ViewModel
         /// <summary>
         /// Opens an input dialog and adds a new playlist with the input title to the <see cref="PlaylistCollection"/>
         /// </summary>
-        public RelayCommand AddPlaylistCommand { get; private set; }
+        public RelayCommand AddPlaylistCommand { get; }
 
         /// <summary>
         /// Opens an input dialog and renames the provided <see cref="Playlist"/> to the input title
         /// </summary>
-        public RelayCommand<Playlist> RenamePlaylistCommand { get; private set; }
+        public RelayCommand<Playlist> RenamePlaylistCommand { get; }
 
         /// <summary>
         /// Opens a file dialog and adds selected videos to the provided playlist
         /// </summary>
-        public RelayCommand<Playlist> AddVideosCommand { get; private set; }
+        public RelayCommand<Playlist> AddVideosCommand { get; }
 
         /// <summary>
         /// Removes provided playlists from the <see cref="PlaylistCollection"/>
         /// </summary>
-        public RelayCommand<IEnumerable> RemovePlaylistsCommand { get; private set; }
+        public RelayCommand<IEnumerable> RemovePlaylistsCommand { get; }
 
         /// <summary>
         /// Removes provided videos from the <see cref="SelectedPlaylist"/>
         /// </summary>
-        public RelayCommand<IEnumerable> RemoveVideosCommand { get; private set; }
+        public RelayCommand<IEnumerable> RemoveVideosCommand { get; }
 
-        public RelayCommand<Playlist> PlayPlaylistCommand { get; private set; }
+        public RelayCommand<Playlist> PlayPlaylistCommand { get; }
 
-        public RelayCommand<Video> PlayVideoCommand { get; private set; }
+        public RelayCommand<Video> PlayVideoCommand { get; }
+
+        public RelayCommand NavigateToMediaPageCommand { get; }
 
         #endregion
 
         public PlaylistsViewModel(IUserSettings userSettings,
                                   IFileDialogService fileDialogService,
-                                  IDialogCoordinator dialogCoordinator)
+                                  IDialogCoordinator dialogCoordinator,
+                                  IPageNavigationService pageNavigationService)
         {
             _userSettings = userSettings;
             _fileDialogService = fileDialogService;
             _dialogCoordinator = dialogCoordinator;
+            _pageNavigationService = pageNavigationService;
 
             PlaylistCollection = _userSettings.PlaylistCollection;
 
@@ -87,16 +93,23 @@ namespace vp.ViewModel
             RemoveVideosCommand = new RelayCommand<IEnumerable>(OnRemoveVideos);
             PlayPlaylistCommand = new RelayCommand<Playlist>(OnPlayPlaylist);
             PlayVideoCommand = new RelayCommand<Video>(OnPlayVideo);
+            NavigateToMediaPageCommand = new RelayCommand(OnNavigateToMediaPage);
 
             DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = ApplicationConstants.AutoSaveTimeSpan;
+            timer.Interval = ApplicationConstants.AutoSaveInterval;
             timer.Tick += SaveChanges;
             timer.Start();
-            PlaylistCollection.ListChanged += SaveChanges;
+            //PlaylistCollection.ListChanged += SaveChanges;
+        }
+
+        private void OnNavigateToMediaPage()
+        {
+            _pageNavigationService.NavigateTo("MediaPage");
         }
 
         private void OnPlayVideo(Video video)
         {
+            OnNavigateToMediaPage();
             Messenger.Default.Send(new PlayVideoMessage(SelectedPlaylist, video));
         }
 
