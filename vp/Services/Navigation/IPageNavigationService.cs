@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using vp.Events;
 
 namespace vp.Services.Navigation
 {
@@ -30,5 +31,10 @@ namespace vp.Services.Navigation
         /// Preloads all registered pages into memory
         /// </summary>
         void LoadSingleInstancePages();
+
+        /// <summary>
+        /// Event invoked when NavigateTo method completes
+        /// </summary>
+        event EventHandler<NavigatedEventArgs> Navigated;
     }
 }

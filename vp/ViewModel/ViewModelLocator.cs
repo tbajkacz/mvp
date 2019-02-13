@@ -44,8 +44,8 @@ namespace vp.ViewModel
 
             
 
-            SimpleIoc.Default.GetInstance<IPageNavigationService>().Register("MediaPage", new Uri("../Pages/MediaPage.xaml", UriKind.Relative), true);
-            SimpleIoc.Default.GetInstance<IPageNavigationService>().Register("PlaylistsPage", new Uri("../Pages/PlaylistsPage.xaml", UriKind.Relative));
+            SimpleIoc.Default.GetInstance<IPageNavigationService>().Register(PageKeys.MediaPage, new Uri("../Pages/MediaPage.xaml", UriKind.Relative), true);
+            SimpleIoc.Default.GetInstance<IPageNavigationService>().Register(PageKeys.PlaylistsPage, new Uri("../Pages/PlaylistsPage.xaml", UriKind.Relative));
 
             if (ViewModelBase.IsInDesignModeStatic)
             {

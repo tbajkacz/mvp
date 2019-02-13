@@ -7,22 +7,6 @@
     <SolidColorBrush x:Key="DataGridMouseOverBrush" Color="Gray"/>
     <SolidColorBrush x:Key="DataGridSelectedBrush" Color="Gray" Opacity="0.7"/>
 
-    <Style TargetType="DataGrid" 
-           BasedOn="{StaticResource MetroDataGrid}"
-           x:Key="CurrentPlaylistDataGridStyle">
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding ElementName=VisibilityToggleButton, Path=IsChecked}" Value="false">
-                <Setter Property="Visibility" Value="Hidden"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding ElementName=VisibilityToggleButton, Path=IsChecked}" Value="true">
-                <Setter Property="Visibility" Value="Visible"/>
-            </DataTrigger>
-        </Style.Triggers>
-        <Setter Property="RowBackground" Value="{StaticResource DataGridBackgroundBrush}"/>
-        <Setter Property="Background" Value="{StaticResource DataGridBackgroundBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource DataGridForegroundBrush}"/>
-        <Setter Property="Width" Value="350"/>
-    </Style>
 
     <Style TargetType="DataGridRow"
            BasedOn="{StaticResource MetroDataGridRow}"

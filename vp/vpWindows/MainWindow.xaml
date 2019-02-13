@@ -9,6 +9,7 @@
                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                  xmlns:triggerActions="clr-namespace:vp.TriggerActions"
                  xmlns:converters="clr-namespace:vp.Converters"
+                 xmlns:fa="http://schemas.fontawesome.io/icons/"
                  mc:Ignorable="d"
                  Title="{Binding WindowTitle}" 
                  Height="450" 
@@ -23,6 +24,17 @@
                  WindowStyle="{Binding IsWindowStyleNone, Converter={StaticResource BoolToWindowStyleConverter}}"
                  ShowTitleBar="{Binding IsTitleBarVisible}"
                  IgnoreTaskbarOnMaximize="{Binding IgnoreTaskBarOnFullscreen}">
+
+    <mah:MetroWindow.LeftWindowCommands>
+        <mah:WindowCommands Visibility="{Binding IsBackButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            VerticalAlignment="Center">
+            <Button Style="{DynamicResource UiButtonStyle}"
+                    VerticalAlignment="Center"
+                    Command="{Binding NavigateToStartupPageCommand}">
+                <fa:ImageAwesome Icon="ArrowLeft" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
+            </Button>
+        </mah:WindowCommands>
+    </mah:MetroWindow.LeftWindowCommands>
 
 
     <i:Interaction.Triggers>

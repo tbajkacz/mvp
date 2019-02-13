@@ -22,6 +22,7 @@ namespace vp.ViewModel
         private bool _isWindowStyleNone;
         private bool _ignoreTaskBarOnFullscreen;
         private string _windowTitle;
+        private bool _isBackButtonVisible;
 
         public bool IsFullscreen
         {
@@ -47,6 +48,12 @@ namespace vp.ViewModel
             set => Set(() => IgnoreTaskBarOnFullscreen, ref _ignoreTaskBarOnFullscreen, value);
         }
 
+        public bool IsBackButtonVisible
+        {
+            get => _isBackButtonVisible;
+            set => Set(() => IsBackButtonVisible, ref _isBackButtonVisible, value);
+        }
+
         public string WindowTitle
         {
             get => _windowTitle;
@@ -60,6 +67,17 @@ namespace vp.ViewModel
         public MainViewModel(IPageNavigationService pageNavigationService)
         {
             this._pageNavigationService = pageNavigationService;
+
+            _pageNavigationService.Navigated += (s, e) => {
+                if (e.Key != PageKeys.DefaultPage)
+                {
+                    IsBackButtonVisible = true;
+                }
+                else
+                {
+                    IsBackButtonVisible = false;
+                }
+            };
 
             PreloadPagesCommand = new RelayCommand(OnPreloadPages);
             NavigateToStartupPageCommand = new RelayCommand(OnNavigateToStartupPage);
@@ -100,7 +118,7 @@ namespace vp.ViewModel
 
         private void OnNavigateToStartupPage()
         {
-            _pageNavigationService.NavigateTo("MediaPage");
+            _pageNavigationService.NavigateTo(PageKeys.DefaultPage);
         }
 
         private void OnPreloadPages()

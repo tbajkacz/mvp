@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using GalaSoft.MvvmLight.Messaging;
+using vp.Events;
 using vp.Messaging;
 using vp.vpWindows;
 using vp.ViewModel;
@@ -17,7 +18,6 @@ namespace vp.Services.Navigation
     {
         private readonly Dictionary<string, (Uri uri, bool singleInstance)> _pagesUri;
         private readonly Dictionary<string, Page> _pages;
-
 
         public PageNavigationService()
         {
@@ -45,13 +45,12 @@ namespace vp.Services.Navigation
             if (!_pagesUri.ContainsKey(key)) throw new ArgumentException($"Page {key} does not exist");
 
             var navigation = ((MainWindow)Application.Current.MainWindow).MainWindowFrame.NavigationService;
-
+            
             if (!_pagesUri[key].singleInstance)
             {
                 navigation.Navigate(_pagesUri[key].uri);
-                return;
             }
-            if (!_pages.ContainsKey(key))
+            else if (!_pages.ContainsKey(key))
             {
                 Page p = Application.LoadComponent(_pagesUri[key].uri) as Page;
                 _pages.Add(key, p);
@@ -61,6 +60,7 @@ namespace vp.Services.Navigation
             {
                 navigation.Navigate(_pages[key]);
             }
+            Navigated?.Invoke(this, new NavigatedEventArgs(key));
         }
 
         public void LoadSingleInstancePages()
@@ -74,5 +74,7 @@ namespace vp.Services.Navigation
                 }
             }
         }
+
+        public event EventHandler<NavigatedEventArgs> Navigated;
     }
 }

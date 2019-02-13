@@ -104,7 +104,7 @@ namespace vp.ViewModel
 
         private void OnNavigateToMediaPage()
         {
-            _pageNavigationService.NavigateTo("MediaPage");
+            _pageNavigationService.NavigateTo(PageKeys.MediaPage);
         }
 
         private void OnPlayVideo(Video video)

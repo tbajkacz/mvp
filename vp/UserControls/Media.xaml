@@ -47,7 +47,7 @@
                 </LinearGradientBrush>
             </ffme:MediaElement.Background>
         </ffme:MediaElement>
-        
+
         <DockPanel LastChildFill="False">
             <StackPanel Orientation="Vertical"
                         DockPanel.Dock="Bottom">
@@ -133,7 +133,7 @@
                                     </Style>
                                 </Button.Style>
                             </Button>
-                            
+
                             <Button Command="{Binding NextVideoCommand}"
                                     Style="{DynamicResource UiButtonStyle}">
                                 <fa:ImageAwesome Icon="Forward" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
@@ -205,6 +205,19 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
 
+                <DataGrid.Style>
+                    <Style TargetType="DataGrid"
+                           BasedOn="{StaticResource MetroDataGrid}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=VisibilityToggleButton, Path=IsChecked}" Value="false">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=VisibilityToggleButton, Path=IsChecked}" Value="true">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Style>
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow"
                            BasedOn="{StaticResource UiDataGridRow}">

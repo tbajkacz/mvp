@@ -15,7 +15,7 @@
              dialog:DialogParticipation.Register="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
              >
 
-    <Grid>
+    <Grid Margin="2">
 
         <Grid.Resources>
             
@@ -32,20 +32,12 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.5*"/>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Vertical">
-            <Button Style="{DynamicResource UiButtonStyle}"
-                    Command="{Binding NavigateToMediaPageCommand}">
-                <fa:ImageAwesome Icon="Tv" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
-            </Button>
-        </StackPanel>
-
         <DataGrid Name="PlaylistDataGrid"
-                  Grid.Column="1"
+                  Grid.Column="0"
                   ItemsSource="{Binding PlaylistCollection}"
                   ContextMenu="{StaticResource PlaylistsColumnContextMenu}"
                   AutoGenerateColumns="False"
@@ -88,7 +80,7 @@
         </DataGrid>
 
         <DataGrid Name="VideosDataGrid"
-                  Grid.Column="2"
+                  Grid.Column="1"
                   ItemsSource="{Binding ElementName=PlaylistDataGrid, Path=SelectedItem.Videos}"
                   ContextMenu="{StaticResource VideosColumnContextMenu}"
                   AutoGenerateColumns="False"
