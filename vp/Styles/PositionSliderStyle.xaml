@@ -2,16 +2,18 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:vp.Styles">
 
+    <SolidColorBrush x:Key="SelectionRangeFill" Color="WhiteSmoke"/>
+    <SolidColorBrush x:Key="SelectionRangeBase" Color="Gray"/>
+    <SolidColorBrush x:Key="ThumbFill" Color="FloralWhite"/>
+    <SolidColorBrush x:Key="ThumbDraggingFill" Color="LightGray"/>
+    <SolidColorBrush x:Key="SliderBackground" Color="Black" Opacity="0.3"/>
+
     <ControlTemplate TargetType="Slider"
                      x:Key="PositionSliderTemplate">
         <Border x:Name="border"
                 Background="Transparent" 
                 SnapsToDevicePixels="True">
             <Grid>
-                <Grid.Background>
-                    <SolidColorBrush Color="Black"
-                                     Opacity="0.3"/>
-                </Grid.Background>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="{TemplateBinding MinHeight}"/>
                 </Grid.RowDefinitions>
@@ -22,14 +24,14 @@
                         <Rectangle RadiusX="1" 
                                    RadiusY="1" 
                                    Margin="10 0 0 0"
-                                   Fill="WhiteSmoke" />
+                                   Fill="{DynamicResource SelectionRangeFill}" />
                     </Border>
                     <Border ClipToBounds="True" 
                             Height="3">
                         <Rectangle RadiusX="1" 
                                    RadiusY="1" 
                                    Margin="0 0 10 0" 
-                                   Fill="Gray"/>
+                                   Fill="{DynamicResource SelectionRangeBase}"/>
                     </Border>
                 </DockPanel>
                 <Track x:Name="PART_Track">
@@ -40,13 +42,13 @@
                                VerticalAlignment="Center">
                             <Thumb.Template>
                                 <ControlTemplate TargetType="Thumb">
-                                    <Ellipse Fill="FloralWhite"
+                                    <Ellipse Fill="{DynamicResource ThumbFill}"
                                              MinHeight="{TemplateBinding MinHeight}"
                                              MinWidth="{TemplateBinding MinWidth}"
                                              x:Name="Ellipse"/>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsDragging" Value="True">
-                                            <Setter TargetName="Ellipse" Property="Fill" Value="LightGray"/>
+                                            <Setter TargetName="Ellipse" Property="Fill" Value="{DynamicResource ThumbDraggingFill}"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>

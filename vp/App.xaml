@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              d1p1:Ignorable="d" 
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             Activated="OnActivated">
+             Startup="OnStartup">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -15,15 +15,21 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
                 <!-- Accent and AppTheme setting -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml"/>-->
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" /> -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml"/>
                 <ResourceDictionary Source="Styles/MediaButtonStyle.xaml"/>
-                <ResourceDictionary Source="Styles/CurrentPlaylistDataGridStyle.xaml"/>
                 <ResourceDictionary Source="Styles/PositionSliderStyle.xaml"/>
                 <ResourceDictionary Source="Styles/VolumeSliderStyle.xaml"/>
+                <ResourceDictionary Source="Styles/DataGridStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:vp.ViewModel" />
             <converters:MediaElementToSliderVolumeConverter x:Key="MediaElementToSliderVolumeConverter"/>
+            <converters:BoolToWindowStyleConverter x:Key="BoolToWindowStyleConverter"/>
+            <converters:BoolToWindowStateConverter x:Key="BoolToWindowStateConverter"/>
+            <converters:TimeSpanToDoubleConverter x:Key="TimeSpanToDoubleConverter"/>
+            <converters:TimeWatchedAndDurationToPercentageConverter x:Key="TimeWatchedAndDurationToPercentageConverter"/>
+            <converters:SelectedItemToBoolConverter x:Key="SelectedItemToBoolConverter"/>
+            <converters:DurationToTimeSpanConverter x:Key="DurationToTimeSpanConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

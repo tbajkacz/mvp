@@ -9,6 +9,7 @@
              mc:Ignorable="d" 
              xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              d:DesignHeight="450" d:DesignWidth="800"
              DataContext="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel}"
              dialog:DialogParticipation.Register="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
@@ -17,8 +18,7 @@
     <Grid>
 
         <Grid.Resources>
-            <converters:SelectedItemToBoolConverter x:Key="SelectedItemToBoolConverter"/>
-            <converters:TimeWatchedAndDurationToPercentageConverter x:Key="TimeWatchedAndDurationToPercentageConverter"/>
+            
             <ContextMenu x:Key="PlaylistsColumnContextMenu">
                 <MenuItem Header="Add"
                           Command="{Binding AddPlaylistCommand}"/>
@@ -37,13 +37,12 @@
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Column="0"
-                Content="-"
-                Height="30"
-                Width="30"
-                VerticalAlignment="Top"
-                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
-                Command="{Binding NavigateToMediaPageCommand}"/>
+        <StackPanel Orientation="Vertical">
+            <Button Style="{DynamicResource UiButtonStyle}"
+                    Command="{Binding NavigateToMediaPageCommand}">
+                <fa:ImageAwesome Icon="Tv" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
+            </Button>
+        </StackPanel>
 
         <DataGrid Name="PlaylistDataGrid"
                   Grid.Column="1"
@@ -61,7 +60,7 @@
                                     Width="*"/>
             </DataGrid.Columns>
             <DataGrid.Resources>
-                <ContextMenu x:Key="DataRowContextMenu">
+                <ContextMenu x:Key="PlaylistDataRowContextMenu">
                     <MenuItem Header="Play"
                               Command="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel.PlayPlaylistCommand}"
                               CommandParameter="{Binding Source={x:Reference PlaylistDataGrid}, Path=SelectedItem}"/>
@@ -75,10 +74,9 @@
             </DataGrid.Resources>
 
             <DataGrid.RowStyle>
-                <!--Without BasedOn row becomes white on right click-->
-                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource MetroDataGridRow}">
-                    <Setter Property="ContextMenu" Value="{StaticResource DataRowContextMenu}" />
-                    <Setter Property="Visibility" Value="Visible"></Setter>
+                <Style TargetType="DataGridRow"
+                       BasedOn="{StaticResource UiDataGridRow}">
+                    <Setter Property="ContextMenu" Value="{StaticResource PlaylistDataRowContextMenu}" />
                 </Style>
             </DataGrid.RowStyle>
 
@@ -102,10 +100,21 @@
                                     Binding="{Binding Name}"
                                     Width="5*"/>
                 <DataGridTextColumn Header="Length"
-                                    Binding="{Binding Length}"
-                                    Width="*"/>
-                <DataGridTextColumn Header="Progress"
+                                    Binding="{Binding Length, StringFormat=\{0:hh\\:mm\\:ss\}}"
                                     Width="*">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MetroDataGridColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Progress"
+                                    Width="1.1*">
                     <DataGridTextColumn.Binding>
                         <MultiBinding Converter="{StaticResource TimeWatchedAndDurationToPercentageConverter}"
                                       StringFormat="{}{0}%">
@@ -113,11 +122,21 @@
                             <Binding Path="Length"/>
                         </MultiBinding>
                     </DataGridTextColumn.Binding>
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MetroDataGridColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                   <DataGridTextColumn.ElementStyle>
+                       <Style TargetType="TextBlock">
+                           <Setter Property="HorizontalAlignment" Value="Center"/>
+                       </Style>
+                   </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
             </DataGrid.Columns>
 
             <DataGrid.Resources>
-                <ContextMenu x:Key="DataRowContextMenu">
+                <ContextMenu x:Key="VideoDataRowContextMenu">
                     <MenuItem Header="Play"
                               Command="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel.PlayVideoCommand}"
                               CommandParameter="{Binding Source={x:Reference VideosDataGrid}, Path=SelectedItem}"/>
@@ -129,8 +148,8 @@
 
             <DataGrid.RowStyle>
                 <!--Without BasedOn row becomes white on right click-->
-                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource MetroDataGridRow}">
-                    <Setter Property="ContextMenu" Value="{StaticResource DataRowContextMenu}" />
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource UiDataGridRow}">
+                    <Setter Property="ContextMenu" Value="{StaticResource VideoDataRowContextMenu}" />
                 </Style>
             </DataGrid.RowStyle>
 

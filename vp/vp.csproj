@@ -96,6 +96,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\DataGridStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\PositionSliderStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -132,6 +136,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\BoolToWindowStateConverter.cs" />
+    <Compile Include="Converters\BoolToWindowStyleConverter.cs" />
+    <Compile Include="Converters\DurationToTimeSpanConverter.cs" />
     <Compile Include="Converters\MediaElementToSliderVolumeConverter.cs" />
     <Compile Include="Converters\SelectedItemToBoolConverter.cs" />
     <Compile Include="Converters\TimeSpanToDoubleConverter.cs" />
@@ -141,6 +148,8 @@
     <Compile Include="Extensions\VideoExtensions.cs" />
     <Compile Include="Messaging\PlayPlaylistMessage.cs" />
     <Compile Include="Messaging\PlayVideoMessage.cs" />
+    <Compile Include="Messaging\ToggleWindowFullscreenMessage.cs" />
+    <Compile Include="Messaging\VideoOpenedMessage.cs" />
     <Compile Include="Models\Playlist.cs" />
     <Compile Include="Models\PlaylistCollection.cs" />
     <Compile Include="Models\Video.cs" />
@@ -150,8 +159,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>UserSettings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Services\AppService\AppService.cs" />
-    <Compile Include="Services\AppService\IAppService.cs" />
     <Compile Include="Services\Dialogs\FileDialogService.cs" />
     <Compile Include="Services\Dialogs\IFileDialogService.cs" />
     <Compile Include="Services\Media\IMediaService.cs" />

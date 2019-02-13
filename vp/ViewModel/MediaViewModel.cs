@@ -8,7 +8,6 @@ using GalaSoft.MvvmLight.Messaging;
 using vp.Events;
 using vp.Messaging;
 using vp.Models;
-using vp.Services.AppService;
 using vp.Services.Media;
 using vp.Services.Navigation;
 using vp.Services.Playlists;
@@ -29,7 +28,6 @@ namespace vp.ViewModel
         private IMediaService _mediaService;
         private readonly IUserSettings _userSettings;
         private readonly IPlaylistManager _playlistManager;
-        private readonly IAppService _appService;
         private readonly IPageNavigationService _pageNavigationService;
         private double _volume;
         private Playlist _currentPlaylist;
@@ -74,12 +72,10 @@ namespace vp.ViewModel
 
         public MediaViewModel(IUserSettings userSettings,
                               IPlaylistManager playlistManager,
-                              IAppService appService,
                               IPageNavigationService pageNavigationService)
         {
             _userSettings = userSettings;
             _playlistManager = playlistManager;
-            _appService = appService;
             _pageNavigationService = pageNavigationService;
             InitializeMediaServiceCommand = new RelayCommand<IMediaService>(OnInitializeMediaService);
             OpenVideoCommand = new RelayCommand<Video>(OnOpenVideo);
@@ -191,6 +187,7 @@ namespace vp.ViewModel
             CurrentPlaylist.CurrentlyPlayingId = CurrentPlaylist.Videos.IndexOf(e.OpenedVideo);
             _currentVideo = e.OpenedVideo;
             _currentProgress = _currentVideo.TimeWatched;
+            Messenger.Default.Send(new VideoOpenedMessage(e.OpenedVideo));
         }
 
         private async void OnOpenVideo(Video video)
@@ -237,7 +234,7 @@ namespace vp.ViewModel
 
         private void OnFullscreen()
         {
-            _appService.ToggleMainWindowFullscreen();
+            Messenger.Default.Send(new ToggleWindowFullscreenMessage());
         }
     }
 }

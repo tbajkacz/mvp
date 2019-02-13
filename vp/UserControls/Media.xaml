@@ -24,10 +24,6 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <UserControl.Resources>
-        <converters:TimeSpanToDoubleConverter x:Key="TimeSpanToDoubleConverter"/>
-        <converters:TimeWatchedAndDurationToPercentageConverter x:Key="TimeWatchedAndDurationToPercentageConverter"/>
-    </UserControl.Resources>
     <UserControl.ContextMenu>
         <ContextMenu>
             <MenuItem Header="test"
@@ -56,15 +52,29 @@
             <StackPanel Orientation="Vertical"
                         DockPanel.Dock="Bottom">
 
-                <Slider 
-                    Maximum="{Binding ElementName=MediaPlayer, Path=NaturalDuration, Converter={StaticResource TimeSpanToDoubleConverter}}"
-                    TickFrequency="0.01"
-                    IsMoveToPointEnabled="True"
-                    Value="{Binding ElementName=MediaPlayer, Path=Position, Converter={StaticResource TimeSpanToDoubleConverter}}"
-                    Style="{DynamicResource PositionSliderStyle}">
-                </Slider>
+                <DockPanel Background="{DynamicResource SliderBackground}">
+                    <Slider 
+                        Maximum="{Binding ElementName=MediaPlayer, Path=NaturalDuration, Converter={StaticResource TimeSpanToDoubleConverter}}"
+                        TickFrequency="0.01"
+                        IsMoveToPointEnabled="True"
+                        DockPanel.Dock="Top"
+                        Value="{Binding ElementName=MediaPlayer, Path=Position, Converter={StaticResource TimeSpanToDoubleConverter}}"
+                        Style="{DynamicResource PositionSliderStyle}">
+                    </Slider>
+                    <TextBlock Text="{Binding ElementName=MediaPlayer, Path=RemainingDuration, StringFormat=\{0:hh\\:mm\\:ss\}, Converter={StaticResource DurationToTimeSpanConverter}}" 
+                               Foreground="{DynamicResource ButtonForegroundBrush}" 
+                               FontSize="10" 
+                               DockPanel.Dock="Right"
+                               Margin="0 0 15 0"/>
 
-                <StatusBar Height="60"
+                    <TextBlock Text="{Binding ElementName=MediaPlayer, Path=Position, StringFormat=\{0:hh\\:mm\\:ss\}}" 
+                               Foreground="{DynamicResource ButtonForegroundBrush}" 
+                               FontSize="10" 
+                               DockPanel.Dock="Left"
+                               Margin="15 0 0 0"/>
+                </DockPanel>
+
+                <StatusBar Height="40"
                            VerticalAlignment="Bottom">
                     <StatusBar.Background>
                         <SolidColorBrush Color="Black"
@@ -161,14 +171,14 @@
                       IsReadOnly="True"
                       CanUserReorderColumns="False"
                       mah:DataGridRowHelper.SelectionUnit="FullRow"
-                      Style="{DynamicResource CurrentPlaylistDataGridStyle}">
+                      Width="350"
+                      >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Video"
                                         Binding="{Binding Name}"
                                         Width="4*">
                         <DataGridTextColumn.HeaderStyle>
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="Background" Value="{StaticResource DataGridBackgroundBrush}"/>
+                            <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MetroDataGridColumnHeader}">
                                 <Setter Property="Padding" Value="4"/>
                             </Style>
                         </DataGridTextColumn.HeaderStyle>
@@ -188,19 +198,25 @@
                             </MultiBinding>
                         </DataGridTextColumn.Binding>
                         <DataGridTextColumn.HeaderStyle>
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="Background" Value="{StaticResource DataGridBackgroundBrush}" />
+                            <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MetroDataGridColumnHeader}">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                             </Style>
                         </DataGridTextColumn.HeaderStyle>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
+
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow"
+                           BasedOn="{StaticResource UiDataGridRow}">
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.InputBindings>
+                    <!--TODO row only-->
+                    <MouseBinding MouseAction="LeftDoubleClick" 
+                                  Command="{Binding OpenVideoCommand}"
+                                  CommandParameter="{Binding ElementName=PlaylistDataGrid, Path=SelectedItem}"/>
+                </DataGrid.InputBindings>
             </DataGrid>
-            <DockPanel.InputBindings>
-                <MouseBinding MouseAction="LeftDoubleClick" 
-                              Command="{Binding OpenVideoCommand}"
-                              CommandParameter="{Binding ElementName=PlaylistDataGrid, Path=SelectedItem}"/>
-            </DockPanel.InputBindings>
         </DockPanel>
     </Grid>
 </UserControl>

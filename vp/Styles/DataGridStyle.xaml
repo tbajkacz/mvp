@@ -2,16 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:vp.Styles">
 
-    <!--<DataGridTextColumn.HeaderStyle>
-                            <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MetroDataGridColumnHeader}">
-                                <Setter Property="Background" Value="{StaticResource DataGridBackgroundBrush}" />
-                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                <Setter Property="Foreground" Value="{DynamicResource DataGridForegroundBrush}"/>
-                            </Style>
-                        </DataGridTextColumn.HeaderStyle>
-    -->
     <SolidColorBrush x:Key="DataGridBackgroundBrush" Color="#2f3030"/>
     <SolidColorBrush x:Key="DataGridForegroundBrush" Color="WhiteSmoke"/>
+    <SolidColorBrush x:Key="DataGridMouseOverBrush" Color="Gray"/>
+    <SolidColorBrush x:Key="DataGridSelectedBrush" Color="Gray" Opacity="0.7"/>
 
     <Style TargetType="DataGrid" 
            BasedOn="{StaticResource MetroDataGrid}"
@@ -30,4 +24,17 @@
         <Setter Property="Width" Value="350"/>
     </Style>
 
+    <Style TargetType="DataGridRow"
+           BasedOn="{StaticResource MetroDataGridRow}"
+           x:Key="UiDataGridRow">
+        <Setter Property="Visibility" Value="Visible"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource DataGridMouseOverBrush}"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{DynamicResource DataGridSelectedBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

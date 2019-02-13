@@ -17,7 +17,6 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
 using MahApps.Metro.Controls.Dialogs;
-using vp.Services.AppService;
 using vp.Services.Dialogs;
 using vp.Services.Navigation;
 using vp.Services.Playlists;
@@ -41,7 +40,6 @@ namespace vp.ViewModel
             SimpleIoc.Default.Register<IPlaylistManager, PlaylistManager>();
             SimpleIoc.Default.Register<IPlaylistCollectionManager, PlaylistCollectionManager>();
             SimpleIoc.Default.Register<IFileDialogService, FileDialogService>();
-            SimpleIoc.Default.Register<IAppService, AppService>();
             SimpleIoc.Default.Register<IPageNavigationService, PageNavigationService>();
 
             

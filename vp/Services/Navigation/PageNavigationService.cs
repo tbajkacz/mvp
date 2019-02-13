@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 using GalaSoft.MvvmLight.Messaging;
 using vp.Messaging;
 using vp.vpWindows;

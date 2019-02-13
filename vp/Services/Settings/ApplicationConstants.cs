@@ -15,5 +15,7 @@ namespace vp.Services.Settings
             .Replace("*", string.Empty).Replace(";", string.Empty).Split(' ');
 
         public static TimeSpan AutoSaveInterval => TimeSpan.FromSeconds(1);
+
+
     }
 }

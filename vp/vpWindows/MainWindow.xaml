@@ -8,15 +8,22 @@
                  xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                  xmlns:triggerActions="clr-namespace:vp.TriggerActions"
+                 xmlns:converters="clr-namespace:vp.Converters"
                  mc:Ignorable="d"
-                 Title="MainViewModelWindow" 
+                 Title="{Binding WindowTitle}" 
                  Height="450" 
                  Width="800"
                  DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
-                 WindowStyle="SingleBorderWindow"
                  BorderBrush="Black"
                  WindowTitleBrush="Black"
-                 >
+                 NonActiveWindowTitleBrush="Black"
+                 NonActiveBorderBrush="Black"
+                 TitleCharacterCasing="Normal"
+                 WindowState="{Binding IsFullscreen, Converter={StaticResource BoolToWindowStateConverter}}"
+                 WindowStyle="{Binding IsWindowStyleNone, Converter={StaticResource BoolToWindowStyleConverter}}"
+                 ShowTitleBar="{Binding IsTitleBarVisible}"
+                 IgnoreTaskbarOnMaximize="{Binding IgnoreTaskBarOnFullscreen}">
+
 
     <i:Interaction.Triggers>
         <i:EventTrigger>
@@ -24,28 +31,8 @@
             <i:InvokeCommandAction Command="{Binding NavigateToStartupPageCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    
+
     <Grid>
-
-        <!--<TabControl Name="MainTabControl">
-            <TabItem Header="Player"
-                 Visibility="Visible">
-                <Grid>
-                    <usercontrols:Media/>
-
-
-                    <Button Height="5"
-                            Command="{Binding NavigateToPlaylistTabCommand}">
-                        
-                    </Button>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="Playlists"
-                 Visibility="Visible">
-                <usercontrols:Playlists/>
-            </TabItem>
-        </TabControl>-->
 
         <Frame x:Name="MainWindowFrame"
                NavigationUIVisibility="Hidden"/>
