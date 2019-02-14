@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using vp.Services.Settings;
 
 namespace vp.Models
 {
@@ -55,6 +56,20 @@ namespace vp.Models
             }
 
             return this.All(p => p.PlaylistTitle != title);
+        }
+
+
+        public string GetUniqueNewPlaylistTitle()
+        {
+            var newTitle = ApplicationConstants.NewPlaylistTitle;
+            int i = 1;
+            while (!CheckTitleUnique(newTitle))
+            {
+                newTitle = ApplicationConstants.NewPlaylistTitle + i.ToString();
+                i++;
+            }
+
+            return newTitle;
         }
     }
 }

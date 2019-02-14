@@ -16,6 +16,6 @@ namespace vp.Services.Settings
 
         public static TimeSpan AutoSaveInterval => TimeSpan.FromSeconds(1);
 
-
+        public static string NewPlaylistTitle => "Unnamed";
     }
 }

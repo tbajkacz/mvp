@@ -24,7 +24,6 @@
             </ResourceDictionary.MergedDictionaries>
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:vp.ViewModel" />
             <converters:MediaElementToSliderVolumeConverter x:Key="MediaElementToSliderVolumeConverter"/>
-            <converters:BoolToWindowStyleConverter x:Key="BoolToWindowStyleConverter"/>
             <converters:BoolToWindowStateConverter x:Key="BoolToWindowStateConverter"/>
             <converters:TimeSpanToDoubleConverter x:Key="TimeSpanToDoubleConverter"/>
             <converters:TimeWatchedAndDurationToPercentageConverter x:Key="TimeWatchedAndDurationToPercentageConverter"/>
