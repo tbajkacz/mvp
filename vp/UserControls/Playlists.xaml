@@ -10,6 +10,9 @@
              xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:command="http://www.galasoft.ch/mvvmlight"
+             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              d:DesignHeight="450" d:DesignWidth="800"
              DataContext="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel}"
              dialog:DialogParticipation.Register="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
@@ -79,6 +82,7 @@
             </DataGrid.InputBindings>
         </DataGrid>
 
+        <!--Both file drops and item drops are handled by the IDropTarget-->
         <DataGrid Name="VideosDataGrid"
                   Grid.Column="1"
                   ItemsSource="{Binding ElementName=PlaylistDataGrid, Path=SelectedItem.Videos}"
@@ -86,7 +90,11 @@
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   mah:DataGridRowHelper.SelectionUnit="FullRow"
-                  CanUserReorderColumns="False">
+                  CanUserReorderColumns="False"
+                  dd:DragDrop.IsDragSource="True"
+                  dd:DragDrop.IsDropTarget="True"
+                  dd:DragDrop.DropHandler="{Binding}">
+
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name"
                                     Binding="{Binding Name}"

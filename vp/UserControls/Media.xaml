@@ -24,13 +24,9 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <UserControl.ContextMenu>
-        <ContextMenu>
-            <MenuItem Header="test"
-                      Command="{Binding OpenVideoCommand}"></MenuItem>
-        </ContextMenu>
-    </UserControl.ContextMenu>
 
+
+    
     <Grid>
         <ffme:MediaElement x:Name="MediaPlayer" 
                            LoadedBehavior="Play"
@@ -38,17 +34,30 @@
                            MediaOpened="MediaPlayer_OnMediaOpened"
                            Volume="{Binding Volume, UpdateSourceTrigger=PropertyChanged}"
                            Position="{Binding Position}"
-                           >
+                           AllowDrop="True">
             <ffme:MediaElement.Background>
-                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                <!--<LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                     <GradientStop Color="Black" Offset="0"/>
                     <GradientStop Color="#02013a" Offset="0.5"/>
                     <GradientStop Color="Black" Offset="0.9"/>
-                </LinearGradientBrush>
+                </LinearGradientBrush>-->
+                <SolidColorBrush Color="Black"/>
             </ffme:MediaElement.Background>
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <command:EventToCommand Command="{Binding ToggleFullscreenCommand}"/>
+                </i:EventTrigger>
+
+                <i:EventTrigger EventName="Drop">
+                    <command:EventToCommand Command="{Binding HandleMediaElementDropCommand}"
+                                            PassEventArgsToCommand="True"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </ffme:MediaElement>
 
-        <DockPanel LastChildFill="False">
+        <DockPanel LastChildFill="False"
+                   Name="MainDockPanel">
             <StackPanel Orientation="Vertical"
                         DockPanel.Dock="Bottom">
 
@@ -74,7 +83,7 @@
                                Margin="15 0 0 0"/>
                 </DockPanel>
 
-                <StatusBar Height="40"
+                <StatusBar Height="44"
                            VerticalAlignment="Bottom">
                     <StatusBar.Background>
                         <SolidColorBrush Color="Black"
@@ -99,7 +108,8 @@
                         <Slider Value="{Binding Volume, Converter={StaticResource MediaElementToSliderVolumeConverter}, Mode=TwoWay}"
                                 Maximum="{x:Static settings:ApplicationConstants.VolumeSliderMaxValue}"
                                 Width="100"
-                                Style="{DynamicResource VolumeSliderStyle}"/>
+                                Style="{DynamicResource VolumeSliderStyle}"
+                                IsMoveToPointEnabled="True"/>
                     </StatusBarItem>
                     <StatusBarItem Grid.Column="1"
                            HorizontalAlignment="Center">
@@ -154,7 +164,7 @@
                                     Style="{DynamicResource UiButtonStyle}">
                                 <fa:ImageAwesome Icon="Edit" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
                             </Button>
-                            <Button Command="{Binding FullscreenCommand}"
+                            <Button Command="{Binding ToggleFullscreenCommand}"
                                     Style="{DynamicResource UiButtonStyle}"
                                     Padding="10">
                                 <fa:ImageAwesome Icon="ArrowsAlt" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
@@ -172,7 +182,14 @@
                       CanUserReorderColumns="False"
                       mah:DataGridRowHelper.SelectionUnit="FullRow"
                       Width="350"
-                      >
+                      Opacity="0.85"
+                      AllowDrop="True">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Drop">
+                        <command:EventToCommand Command="{Binding HandleDataGridDropCommand}"
+                                                PassEventArgsToCommand="True"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Video"
                                         Binding="{Binding Name}"

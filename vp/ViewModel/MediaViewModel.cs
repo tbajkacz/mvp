@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -82,8 +84,10 @@ namespace vp.ViewModel
             PlayPauseVideoCommand = new RelayCommand(OnPlayPauseVideo);
             PrevVideoCommand = new RelayCommand(OnPrevVideo);
             NextVideoCommand = new RelayCommand(OnNextVideo);
-            FullscreenCommand = new RelayCommand(OnFullscreen);
+            ToggleFullscreenCommand = new RelayCommand(OnToggleFullscreen);
             NavigateToPlaylistPageCommand = new RelayCommand(OnNavigateToPlaylistPage);
+            HandleMediaElementDropCommand = new RelayCommand<DragEventArgs>(OnHandleMediaElementDrop);
+            HandleDataGridDropCommand = new RelayCommand<DragEventArgs>(OnHandleDataGridDrop);
 
             LoadSettings();
             RegisterMessages();
@@ -94,6 +98,9 @@ namespace vp.ViewModel
             timer.Start();
         }
 
+        /// <summary>
+        /// Loads data from <see cref="IUserSettings"/>
+        /// </summary>
         private void LoadSettings()
         {
             Volume = _userSettings.Volume;
@@ -101,6 +108,9 @@ namespace vp.ViewModel
             IsOpenCurrentPlaylistPanel = _userSettings.IsOpenCurrentPlaylistPanel;
         }
 
+        /// <summary>
+        /// Saves the data pulled from <see cref="IUserSettings"/>
+        /// </summary>
         private void SaveSettings()
         {
             _userSettings.Volume = Volume;
@@ -136,7 +146,9 @@ namespace vp.ViewModel
             });
         }
 
-        
+
+        #region Commands
+
 
         /// <summary>
         /// Initializes the <see cref="IMediaService"/> with the provided <see cref="IMediaService"/>
@@ -166,9 +178,28 @@ namespace vp.ViewModel
         /// <summary>
         /// Sets the <see cref="Application.Current"/>.MainWindow to maximized with <see cref="WindowStyle.None"/>
         /// </summary>
-        public RelayCommand FullscreenCommand { get;}
+        public RelayCommand ToggleFullscreenCommand { get;}
 
+        /// <summary>
+        /// Navigates to the playlists page
+        /// </summary>
         public RelayCommand NavigateToPlaylistPageCommand { get; }
+
+        /// <summary>
+        /// Handles the files dropped onto the MediaPlayer
+        /// </summary>
+        public RelayCommand<DragEventArgs> HandleMediaElementDropCommand { get; }
+
+        /// <summary>
+        /// Handles the files dropped onto the DataGrid
+        /// </summary>
+        public RelayCommand<DragEventArgs> HandleDataGridDropCommand { get; }
+
+
+        #endregion
+
+        #region Handlers
+
 
         private void OnNavigateToPlaylistPage()
         {
@@ -232,9 +263,67 @@ namespace vp.ViewModel
         }
 
 
-        private void OnFullscreen()
+        private void OnToggleFullscreen()
         {
             Messenger.Default.Send(new ToggleWindowFullscreenMessage());
         }
+
+        /// <summary>
+        /// Creates a new CurrentPlaylist which will contain the dropped videos
+        /// </summary>
+        /// <param name="e"></param>
+        private void OnHandleMediaElementDrop(DragEventArgs e)
+        {
+            var data = e.Data.GetData(DataFormats.FileDrop);
+            if (data is string[] paths)
+            {
+                var filtered = paths
+                    .Where(p => ApplicationConstants.SupportedVideoExtensions.Contains(Path.GetExtension(p))).ToList();
+
+                if (filtered.Count > 0)
+                {
+                    string newTitle = _userSettings.PlaylistCollection.GetUniqueNewPlaylistTitle();
+                    CurrentPlaylist = _userSettings.PlaylistCollection.Create(newTitle);
+                    foreach (var path in filtered)
+                    {
+                        CurrentPlaylist.Videos.Add(new Video(path));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds the e.Data to the CurrentPlaylist if the data contains videos, if CurrentPlaylist is null then creates a new playlist as well
+        /// </summary>
+        /// <param name="e"></param>
+        private void OnHandleDataGridDrop(DragEventArgs e)
+        {
+            var data = e.Data.GetData(DataFormats.FileDrop);
+            if (data is string[] paths)
+            {
+                var filtered = paths
+                    .Where(p => ApplicationConstants.SupportedVideoExtensions.Contains(Path.GetExtension(p))).ToList();
+                if (filtered.Count <= 0) return;
+
+                if (CurrentPlaylist != null)
+                {
+                    foreach (var path in filtered)
+                    {
+                        CurrentPlaylist.Videos.Add(new Video(path));
+                    }
+                }
+                else
+                {
+                    string newTitle = _userSettings.PlaylistCollection.GetUniqueNewPlaylistTitle();
+                    CurrentPlaylist = _userSettings.PlaylistCollection.Create(newTitle);
+                    foreach (var path in filtered)
+                    {
+                        CurrentPlaylist.Videos.Add(new Video(path));
+                    }
+                }
+            }
+        }
+
+        #endregion
     }
 }

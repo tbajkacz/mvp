@@ -11,6 +11,7 @@ using vp.Messaging;
 using vp.Models;
 using vp.Services.Navigation;
 using vp.Services.Settings;
+using vp.vpWindows;
 
 namespace vp.ViewModel
 {
@@ -64,6 +65,8 @@ namespace vp.ViewModel
 
         public RelayCommand NavigateToStartupPageCommand { get; }
 
+        public RelayCommand ExitFullscreenCommand { get; }
+
         public MainViewModel(IPageNavigationService pageNavigationService)
         {
             this._pageNavigationService = pageNavigationService;
@@ -71,22 +74,30 @@ namespace vp.ViewModel
             _pageNavigationService.Navigated += (s, e) => {
                 if (e.Key != PageKeys.DefaultPage)
                 {
+                    if (IsFullscreen)
+                    {
+                        IsWindowStyleNone = !IsFullscreen;
+                        IsTitleBarVisible = IsFullscreen;
+                    }
                     IsBackButtonVisible = true;
                 }
                 else
                 {
+                    if (IsFullscreen)
+                    {
+                        IsWindowStyleNone = IsFullscreen;
+                        IsTitleBarVisible = !IsFullscreen;
+                    }
                     IsBackButtonVisible = false;
                 }
             };
 
             PreloadPagesCommand = new RelayCommand(OnPreloadPages);
             NavigateToStartupPageCommand = new RelayCommand(OnNavigateToStartupPage);
+            ExitFullscreenCommand = new RelayCommand(OnExitFullscreen);
 
             RegisterMessages();
-            IsFullscreen = false;
-            IsTitleBarVisible = true;
-            IsWindowStyleNone = false;
-            IgnoreTaskBarOnFullscreen = false;
+            SetFullscreen(false);
             WindowTitle = "vp";
         }
 
@@ -94,7 +105,6 @@ namespace vp.ViewModel
         {
             Messenger.Default.Register<ToggleWindowFullscreenMessage>(this, msg =>
             {
-                var temp = Application.Current.MainWindow;
                 if (msg.Fullscreen == null)
                 {
                     SetFullscreen(!IsFullscreen);
@@ -111,8 +121,8 @@ namespace vp.ViewModel
         private void SetFullscreen(bool fullscreen)
         {
             IsFullscreen = fullscreen;
-            IsTitleBarVisible = !fullscreen;
             IsWindowStyleNone = fullscreen;
+            IsTitleBarVisible = !fullscreen;
             IgnoreTaskBarOnFullscreen = fullscreen;
         }
 
@@ -124,6 +134,11 @@ namespace vp.ViewModel
         private void OnPreloadPages()
         {
             _pageNavigationService.LoadSingleInstancePages();
+        }
+
+        private void OnExitFullscreen()
+        {
+            SetFullscreen(false);
         }
     }
 }

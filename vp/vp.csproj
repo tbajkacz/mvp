@@ -63,6 +63,9 @@
     <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.4.1.0, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
     </Reference>
+    <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\gong-wpf-dragdrop.1.1.0\lib\net46\GongSolutions.Wpf.DragDrop.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro, Version=1.6.5.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.6.5\lib\net47\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -137,7 +140,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converters\BoolToWindowStateConverter.cs" />
-    <Compile Include="Converters\BoolToWindowStyleConverter.cs" />
     <Compile Include="Converters\DurationToTimeSpanConverter.cs" />
     <Compile Include="Converters\MediaElementToSliderVolumeConverter.cs" />
     <Compile Include="Converters\SelectedItemToBoolConverter.cs" />
@@ -176,7 +178,6 @@
     <Compile Include="Services\Settings\IUserSettings.cs" />
     <Compile Include="Services\Settings\MockUserSettings.cs" />
     <Compile Include="Services\Settings\UserSettings.cs" />
-    <Compile Include="TriggerActions\SetPropertyAction.cs" />
     <Compile Include="UserControls\Media.xaml.cs">
       <DependentUpon>Media.xaml</DependentUpon>
     </Compile>

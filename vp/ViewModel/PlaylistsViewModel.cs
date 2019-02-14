@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -8,16 +9,18 @@ using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using GongSolutions.Wpf.DragDrop;
 using MahApps.Metro.Controls.Dialogs;
 using vp.Messaging;
 using vp.Models;
 using vp.Services.Dialogs;
 using vp.Services.Navigation;
 using vp.Services.Settings;
+using DragDrop = GongSolutions.Wpf.DragDrop.DragDrop;
 
 namespace vp.ViewModel
 {
-    public class PlaylistsViewModel : ViewModelBase
+    public class PlaylistsViewModel : ViewModelBase, IDropTarget
     {
         private readonly IUserSettings _userSettings;
         private readonly IFileDialogService _fileDialogService;
@@ -66,10 +69,19 @@ namespace vp.ViewModel
         /// </summary>
         public RelayCommand<IEnumerable> RemoveVideosCommand { get; }
 
+        /// <summary>
+        /// Plays the provided playlist
+        /// </summary>
         public RelayCommand<Playlist> PlayPlaylistCommand { get; }
 
+        /// <summary>
+        /// Plays the provided video
+        /// </summary>
         public RelayCommand<Video> PlayVideoCommand { get; }
 
+        /// <summary>
+        /// Navigates to the MediaPlayer page
+        /// </summary>
         public RelayCommand NavigateToMediaPageCommand { get; }
 
         #endregion
@@ -102,6 +114,10 @@ namespace vp.ViewModel
             //PlaylistCollection.ListChanged += SaveChanges;
         }
 
+
+
+        #region Command Handlers
+
         private void OnNavigateToMediaPage()
         {
             _pageNavigationService.NavigateTo(PageKeys.MediaPage);
@@ -117,8 +133,6 @@ namespace vp.ViewModel
         {
             Messenger.Default.Send(new PlayPlaylistMessage(playlist));
         }
-
-        #region Command Handlers
 
         private void OnRemoveVideos(IEnumerable videos)
         {
@@ -155,7 +169,7 @@ namespace vp.ViewModel
             {
                 playlist.PlaylistTitle = newTitle;
             }
-            
+
         }
         private void SaveChanges(object s, EventArgs e)
         {
@@ -197,6 +211,62 @@ namespace vp.ViewModel
             await pdc.CloseAsync();
         }
 
-        #endregion 
+        /// <summary>
+        /// Adds the <see cref="IDataObject"/> if it is a video file and the SelectedPlaylist is not null
+        /// </summary>
+        /// <param name="e"></param>
+        private void HandleVideosDataGridDrop(IDataObject e)
+        {
+            var data = e.GetData(DataFormats.FileDrop);
+            if (data is string[] paths)
+            {
+                var filtered = paths
+                    .Where(p => ApplicationConstants.SupportedVideoExtensions.Contains(Path.GetExtension(p))).ToList();
+                if (filtered.Count <= 0) return;
+
+                if (SelectedPlaylist != null)
+                {
+                    foreach (var path in filtered)
+                    {
+                        SelectedPlaylist.Videos.Add(new Video(path));
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region IDropTarget
+        public void DragOver(IDropInfo dropInfo)
+        {
+            if (dropInfo.Data is IDataObject)
+            {
+                dropInfo.Effects = DragDropEffects.Move;
+            }
+            else
+            {
+                DragDrop.DefaultDropHandler.DragOver(dropInfo);
+            }
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            switch (dropInfo.Data)
+            {
+                case IDataObject d:
+                    HandleVideosDataGridDrop(d);
+                    break;
+                case Video _:
+                {
+                    Video currentVideo = SelectedPlaylist.Videos[SelectedPlaylist.CurrentlyPlayingId ?? 0];
+
+                    DragDrop.DefaultDropHandler.Drop(dropInfo);
+
+                    //fixes invalid CurrentlyPlayingId caused by moving the videos
+                    SelectedPlaylist.CurrentlyPlayingId = SelectedPlaylist.Videos.IndexOf(currentVideo);
+                    break;
+                }
+            }
+        }
+        #endregion
     }
 }
