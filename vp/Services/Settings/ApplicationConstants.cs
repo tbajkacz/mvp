@@ -8,7 +8,7 @@ namespace vp.Services.Settings
 
         public static double VolumeSliderMaxValue => 100;
 
-        public static string FileDialogFilters => "Video files |*.wmv; *.avi; *.flv; *.mp4;";
+        public static string FileDialogFilters => "Video files |*.wmv; *.avi; *.flv; *.mp4; *.mp3;";
 
         //{get;} = is evaluated only once, => on each request
         public static string[] SupportedVideoExtensions { get; } = FileDialogFilters.Remove(0, FileDialogFilters.IndexOf("|") + 1)
@@ -18,6 +18,6 @@ namespace vp.Services.Settings
 
         public static string NewPlaylistTitle => "Unnamed";
 
-        public static string DefaultWindowTitle => "vp";
+        public static string DefaultWindowTitle => "mvp";
     }
 }
