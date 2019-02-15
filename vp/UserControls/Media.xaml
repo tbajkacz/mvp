@@ -12,6 +12,7 @@
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:vp="clr-namespace:vp"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="MediaService"
@@ -238,15 +239,20 @@
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow"
                            BasedOn="{StaticResource UiDataGridRow}">
+                        <Setter Property="vp:AttachedCommand.Event" Value="MouseDoubleClick"/>
+                        <Setter Property="vp:AttachedCommand.Command" Value="{Binding Source={StaticResource Locator}, Path=MediaViewModel.OpenVideoCommand}"/>
+                        <Setter Property="vp:AttachedCommand.CommandParameter" Value="{Binding ElementName=PlaylistDataGrid, Path=SelectedItem}"/>
                     </Style>
                 </DataGrid.RowStyle>
-                <DataGrid.InputBindings>
-                    <!--TODO row only-->
-                    <MouseBinding MouseAction="LeftDoubleClick" 
-                                  Command="{Binding OpenVideoCommand}"
-                                  CommandParameter="{Binding ElementName=PlaylistDataGrid, Path=SelectedItem}"/>
-                </DataGrid.InputBindings>
             </DataGrid>
+
+            <TextBlock Text="{Binding CurrentVideo.Name}"
+                       DockPanel.Dock="Left"
+                       VerticalAlignment="Top"
+                       FontSize="15"
+                       Foreground="White"
+                       Margin="7 0 0 0"
+            />
         </DockPanel>
     </Grid>
 </UserControl>

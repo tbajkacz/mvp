@@ -19,7 +19,6 @@ using GalaSoft.MvvmLight.Views;
 using MahApps.Metro.Controls.Dialogs;
 using vp.Services.Dialogs;
 using vp.Services.Navigation;
-using vp.Services.Playlists;
 using vp.Services.Serialization;
 using vp.Services.Settings;
 
@@ -37,8 +36,6 @@ namespace vp.ViewModel
         static ViewModelLocator()
         {
             SimpleIoc.Default.Register<ISerializer, JsonSerializer>();
-            SimpleIoc.Default.Register<IPlaylistManager, PlaylistManager>();
-            SimpleIoc.Default.Register<IPlaylistCollectionManager, PlaylistCollectionManager>();
             SimpleIoc.Default.Register<IFileDialogService, FileDialogService>();
             SimpleIoc.Default.Register<IPageNavigationService, PageNavigationService>();
 

@@ -51,8 +51,9 @@
 
     <Grid>
 
+        
         <Frame x:Name="MainWindowFrame"
                NavigationUIVisibility="Hidden"/>
-
+        
     </Grid>
 </mah:MetroWindow>

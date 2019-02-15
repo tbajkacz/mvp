@@ -139,6 +139,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="XamlHelpers\AttachedCommand.cs" />
     <Compile Include="Converters\BoolToWindowStateConverter.cs" />
     <Compile Include="Converters\DurationToTimeSpanConverter.cs" />
     <Compile Include="Converters\MediaElementToSliderVolumeConverter.cs" />
@@ -168,10 +169,6 @@
     <Compile Include="Services\Navigation\IPageNavigationService.cs" />
     <Compile Include="Services\Navigation\PageNavigationService.cs" />
     <Compile Include="Services\Navigation\PageKeys.cs" />
-    <Compile Include="Services\Playlists\IPlaylistCollectionManager.cs" />
-    <Compile Include="Services\Playlists\IPlaylistManager.cs" />
-    <Compile Include="Services\Playlists\PlaylistCollectionManager.cs" />
-    <Compile Include="Services\Playlists\PlaylistManager.cs" />
     <Compile Include="Services\Serialization\ISerializer.cs" />
     <Compile Include="Services\Serialization\JsonSerializer.cs" />
     <Compile Include="Services\Settings\ApplicationConstants.cs" />

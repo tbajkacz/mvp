@@ -42,6 +42,36 @@ namespace vp.ViewModel
             set { Set(() => PlaylistCollection, ref _playlistCollection, value); }
         }
 
+        
+
+        public PlaylistsViewModel(IUserSettings userSettings,
+                                  IFileDialogService fileDialogService,
+                                  IDialogCoordinator dialogCoordinator,
+                                  IPageNavigationService pageNavigationService)
+        {
+            _userSettings = userSettings;
+            _fileDialogService = fileDialogService;
+            _dialogCoordinator = dialogCoordinator;
+            _pageNavigationService = pageNavigationService;
+
+            PlaylistCollection = _userSettings.PlaylistCollection;
+
+            AddPlaylistCommand = new RelayCommand(OnAddPlaylist);
+            AddVideosCommand = new RelayCommand<Playlist>(OnAddVideos);
+            RenamePlaylistCommand = new RelayCommand<Playlist>(OnRenamePlaylist);
+            RemovePlaylistsCommand = new RelayCommand<IEnumerable>(OnRemovePlaylists);
+            RemoveVideosCommand = new RelayCommand<IEnumerable>(OnRemoveVideos);
+            PlayPlaylistCommand = new RelayCommand<Playlist>(OnPlayPlaylist);
+            PlayVideoCommand = new RelayCommand<Video>(OnPlayVideo);
+            NavigateToMediaPageCommand = new RelayCommand(OnNavigateToMediaPage);
+
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = ApplicationConstants.AutoSaveInterval;
+            timer.Tick += SaveChanges;
+            timer.Start();
+            //PlaylistCollection.ListChanged += SaveChanges;
+        }
+
         #region Commands
 
         /// <summary>
@@ -86,36 +116,6 @@ namespace vp.ViewModel
 
         #endregion
 
-        public PlaylistsViewModel(IUserSettings userSettings,
-                                  IFileDialogService fileDialogService,
-                                  IDialogCoordinator dialogCoordinator,
-                                  IPageNavigationService pageNavigationService)
-        {
-            _userSettings = userSettings;
-            _fileDialogService = fileDialogService;
-            _dialogCoordinator = dialogCoordinator;
-            _pageNavigationService = pageNavigationService;
-
-            PlaylistCollection = _userSettings.PlaylistCollection;
-
-            AddPlaylistCommand = new RelayCommand(OnAddPlaylist);
-            AddVideosCommand = new RelayCommand<Playlist>(OnAddVideos);
-            RenamePlaylistCommand = new RelayCommand<Playlist>(OnRenamePlaylist);
-            RemovePlaylistsCommand = new RelayCommand<IEnumerable>(OnRemovePlaylists);
-            RemoveVideosCommand = new RelayCommand<IEnumerable>(OnRemoveVideos);
-            PlayPlaylistCommand = new RelayCommand<Playlist>(OnPlayPlaylist);
-            PlayVideoCommand = new RelayCommand<Video>(OnPlayVideo);
-            NavigateToMediaPageCommand = new RelayCommand(OnNavigateToMediaPage);
-
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = ApplicationConstants.AutoSaveInterval;
-            timer.Tick += SaveChanges;
-            timer.Start();
-            //PlaylistCollection.ListChanged += SaveChanges;
-        }
-
-
-
         #region Command Handlers
 
         private void OnNavigateToMediaPage()
@@ -125,13 +125,20 @@ namespace vp.ViewModel
 
         private void OnPlayVideo(Video video)
         {
-            OnNavigateToMediaPage();
-            Messenger.Default.Send(new PlayVideoMessage(SelectedPlaylist, video));
+            if (video != null && SelectedPlaylist != null)
+            {
+                OnNavigateToMediaPage();
+                Messenger.Default.Send(new PlayVideoMessage(SelectedPlaylist, video));
+            }
         }
 
         private void OnPlayPlaylist(Playlist playlist)
         {
-            Messenger.Default.Send(new PlayPlaylistMessage(playlist));
+            if (playlist?.Videos != null && playlist.CurrentlyPlayingId < playlist.Videos.Count)
+            {
+                OnNavigateToMediaPage();
+                Messenger.Default.Send(new PlayPlaylistMessage(playlist));
+            }
         }
 
         private void OnRemoveVideos(IEnumerable videos)
@@ -183,9 +190,12 @@ namespace vp.ViewModel
         private async void OnAddPlaylist()
         {
             string title = await _dialogCoordinator.ShowInputAsync(this, "Add playlist", "Input a title for the playlist");
-            if (string.IsNullOrEmpty(title)) return;
-
-            if (PlaylistCollection?.CheckTitleUnique(title) ?? false)
+            if (title == null) return;
+            if (title == string.Empty)
+            {
+                PlaylistCollection.Create(PlaylistCollection.GetUniqueNewPlaylistTitle());
+            }
+            else if (PlaylistCollection?.CheckTitleUnique(title) ?? false)
             {
                 PlaylistCollection.Create(title);
             }

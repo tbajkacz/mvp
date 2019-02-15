@@ -98,7 +98,7 @@ namespace vp.ViewModel
 
             RegisterMessages();
             SetFullscreen(false);
-            WindowTitle = "vp";
+            WindowTitle = ApplicationConstants.DefaultWindowTitle;
         }
 
         private void RegisterMessages()
@@ -115,7 +115,7 @@ namespace vp.ViewModel
                 }
             });
 
-            Messenger.Default.Register<VideoOpenedMessage>(this, msg => WindowTitle = msg.Video.Name);
+            Messenger.Default.Register<VideoOpenedMessage>(this, msg => WindowTitle = ApplicationConstants.DefaultWindowTitle + " - " + msg.Video.Name);
         }
 
         private void SetFullscreen(bool fullscreen)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -12,7 +13,6 @@ using vp.Messaging;
 using vp.Models;
 using vp.Services.Media;
 using vp.Services.Navigation;
-using vp.Services.Playlists;
 using vp.Services.Settings;
 using vp.UserControls;
 
@@ -29,7 +29,6 @@ namespace vp.ViewModel
         /// </summary>
         private IMediaService _mediaService;
         private readonly IUserSettings _userSettings;
-        private readonly IPlaylistManager _playlistManager;
         private readonly IPageNavigationService _pageNavigationService;
         private double _volume;
         private Playlist _currentPlaylist;
@@ -53,11 +52,17 @@ namespace vp.ViewModel
         {
             set
             {
-                if (_currentVideo != null)
+                if (CurrentVideo != null)
                 {
-                    _currentVideo.TimeWatched = value;
+                    CurrentVideo.TimeWatched = value;
                 }
             }
+        }
+
+        public Video CurrentVideo
+        {
+            get => _currentVideo;
+            set => Set(() => CurrentVideo, ref _currentVideo, value);
         }
 
         public bool IsOpenCurrentPlaylistPanel
@@ -73,11 +78,9 @@ namespace vp.ViewModel
         }
 
         public MediaViewModel(IUserSettings userSettings,
-                              IPlaylistManager playlistManager,
                               IPageNavigationService pageNavigationService)
         {
             _userSettings = userSettings;
-            _playlistManager = playlistManager;
             _pageNavigationService = pageNavigationService;
             InitializeMediaServiceCommand = new RelayCommand<IMediaService>(OnInitializeMediaService);
             OpenVideoCommand = new RelayCommand<Video>(OnOpenVideo);
@@ -126,7 +129,7 @@ namespace vp.ViewModel
             {
                 if (msg.Playlist?.Videos != null && msg.Video != null)
                 {
-                    if (!msg.Playlist.Videos.Contains(msg.Video)) throw new InvalidOperationException($"Video must be a part of the Playlist");
+                    if (!msg.Playlist.Videos.Contains(msg.Video)) throw new InvalidOperationException($"Video must be a part of the Playlist in {nameof(PlayVideoMessage)} handler");
 
                     this.CurrentPlaylist = msg.Playlist;
                     OnOpenVideo(msg.Video);
@@ -138,9 +141,9 @@ namespace vp.ViewModel
                 if (msg.Playlist?.Videos != null)
                 {
                     if (msg.Playlist.CurrentlyPlayingId == null) msg.Playlist.CurrentlyPlayingId = 0;
-                    if (msg.Playlist.CurrentlyPlayingId >= msg.Playlist.Videos.Count) throw new IndexOutOfRangeException("Playlist.CurrentlyPlayingId out of range");
+                    if (msg.Playlist.CurrentlyPlayingId >= msg.Playlist.Videos.Count) throw new IndexOutOfRangeException($"Playlist.CurrentlyPlayingId out of range in {nameof(PlayPlaylistMessage)} handler");
                     this.CurrentPlaylist = msg.Playlist;
-                    
+
                     OnOpenVideo(CurrentPlaylist.Videos[msg.Playlist.CurrentlyPlayingId.Value]);
                 }
             });
@@ -216,7 +219,7 @@ namespace vp.ViewModel
         private void OnMediaOpened(MediaOpenedEventArgs e)
         {
             CurrentPlaylist.CurrentlyPlayingId = CurrentPlaylist.Videos.IndexOf(e.OpenedVideo);
-            _currentVideo = e.OpenedVideo;
+            CurrentVideo = e.OpenedVideo;
             _currentProgress = _currentVideo.TimeWatched;
             Messenger.Default.Send(new VideoOpenedMessage(e.OpenedVideo));
         }
@@ -224,7 +227,7 @@ namespace vp.ViewModel
         private async void OnOpenVideo(Video video)
         {
             //If no null assignment is made then the position binding might set the next videos time watched to 0
-            _currentVideo = null;
+            CurrentVideo = null;
             await _mediaService.Open(video, video.TimeWatched);
         }
 
@@ -288,6 +291,7 @@ namespace vp.ViewModel
                     {
                         CurrentPlaylist.Videos.Add(new Video(path));
                     }
+                    OnOpenVideo(CurrentPlaylist.Videos.First());
                 }
             }
         }

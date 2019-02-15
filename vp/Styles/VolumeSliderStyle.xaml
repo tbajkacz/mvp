@@ -22,14 +22,12 @@
                             Height="3">
                         <Rectangle RadiusX="1" 
                                    RadiusY="1" 
-                                   Margin="10 0 0 0"
                                    Fill="{DynamicResource SelectionRangeFill}" />
                     </Border>
                     <Border ClipToBounds="True" 
                             Height="3">
                         <Rectangle RadiusX="1" 
                                    RadiusY="1" 
-                                   Margin="0 0 10 0" 
                                    Fill="{DynamicResource SelectionRangeBase}"/>
                     </Border>
                 </DockPanel>
