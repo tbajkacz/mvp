@@ -1,4 +1,4 @@
-# mvp - Simple video player that allows you to create playlists and stores your progress
+# mvp - Simple video player that allows you to create playlists and store your video progress 
 
 ![Alt text](https://i.imgur.com/SI7GwtB.png "Media")
 
