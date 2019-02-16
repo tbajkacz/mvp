@@ -23,7 +23,7 @@ namespace vp.Services.Settings
         double Volume { get; set; }
 
         /// <summary>
-        /// Playlist which was playing during the previous instance of the app
+        /// Playlist which was playing during the previous instance of the app null if none
         /// </summary>
         Playlist LastPlayedPlaylist { get; set; }
 

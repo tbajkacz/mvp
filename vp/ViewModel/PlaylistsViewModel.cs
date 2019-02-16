@@ -204,8 +204,27 @@ namespace vp.ViewModel
 
         private async void OnAddVideos(Playlist playlist)
         {
-            string[] suppVidExt = ApplicationConstants.SupportedVideoExtensions;
             string[] files = await _fileDialogService.OpenVideoFileDialogAsync();
+            await AddVideosToPlaylist(playlist, files);
+        }
+
+        /// <summary>
+        /// Adds the <see cref="IDataObject"/> if it is a video file and the SelectedPlaylist is not null
+        /// </summary>
+        /// <param name="e"></param>
+        private async void HandleVideosDataGridDrop(IDataObject e)
+        {
+            var data = e.GetData(DataFormats.FileDrop);
+            if (data is string[] paths)
+            {
+                await AddVideosToPlaylist(SelectedPlaylist, paths);
+            }
+        }
+
+        private async Task AddVideosToPlaylist(Playlist playlist, string[] files)
+        {
+            if (playlist == null) return;
+            string[] suppVidExt = ApplicationConstants.SupportedVideoExtensions;
             var videosTask = Task.Run(() =>
             {
                 return (files.Where(file => file != null)
@@ -215,33 +234,10 @@ namespace vp.ViewModel
             var pdc = await _dialogCoordinator.ShowProgressAsync(this, "Adding videos...", "Please hold on", false);
             foreach (var video in await videosTask)
             {
-                playlist?.Videos?.Add(video);
+                playlist.Videos?.Add(video);
             }
 
             await pdc.CloseAsync();
-        }
-
-        /// <summary>
-        /// Adds the <see cref="IDataObject"/> if it is a video file and the SelectedPlaylist is not null
-        /// </summary>
-        /// <param name="e"></param>
-        private void HandleVideosDataGridDrop(IDataObject e)
-        {
-            var data = e.GetData(DataFormats.FileDrop);
-            if (data is string[] paths)
-            {
-                var filtered = paths
-                    .Where(p => ApplicationConstants.SupportedVideoExtensions.Contains(Path.GetExtension(p))).ToList();
-                if (filtered.Count <= 0) return;
-
-                if (SelectedPlaylist != null)
-                {
-                    foreach (var path in filtered)
-                    {
-                        SelectedPlaylist.Videos.Add(new Video(path));
-                    }
-                }
-            }
         }
         #endregion
 

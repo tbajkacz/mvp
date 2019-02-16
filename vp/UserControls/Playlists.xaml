@@ -25,11 +25,11 @@
             
             <ContextMenu x:Key="PlaylistsColumnContextMenu">
                 <MenuItem Header="Add"
-                          Command="{Binding AddPlaylistCommand}"/>
+                          Command="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel.AddPlaylistCommand}"/>
             </ContextMenu>
             <ContextMenu x:Key="VideosColumnContextMenu">
                 <MenuItem Header="Add"
-                          Command="{Binding AddVideosCommand}"
+                          Command="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel.AddVideosCommand}"
                           CommandParameter="{Binding Source={x:Reference Name=PlaylistDataGrid}, Path=SelectedItem}"
                           IsEnabled="{Binding Source={x:Reference Name=PlaylistDataGrid}, Path=SelectedItem, Converter={StaticResource SelectedItemToBoolConverter}}"/>
             </ContextMenu>
@@ -66,6 +66,8 @@
                     <MenuItem Header="Remove"
                               Command="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel.RemovePlaylistsCommand}"
                               CommandParameter="{Binding Source={x:Reference PlaylistDataGrid}, Path=SelectedItems}"/>
+                    <MenuItem Header="Add"
+                              Command="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel.AddPlaylistCommand}"/>
                 </ContextMenu>
             </DataGrid.Resources>
 
@@ -142,6 +144,10 @@
                     <MenuItem Header="Remove"
                               Command="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel.RemoveVideosCommand}"
                               CommandParameter="{Binding Source={x:Reference VideosDataGrid}, Path=SelectedItems}"/>
+                    <MenuItem Header="Add"
+                              Command="{Binding Source={StaticResource Locator}, Path=PlaylistsViewModel.AddVideosCommand}"
+                              CommandParameter="{Binding Source={x:Reference Name=PlaylistDataGrid}, Path=SelectedItem}"
+                              IsEnabled="{Binding Source={x:Reference Name=PlaylistDataGrid}, Path=SelectedItem, Converter={StaticResource SelectedItemToBoolConverter}}"/>
                 </ContextMenu>
             </DataGrid.Resources>
 

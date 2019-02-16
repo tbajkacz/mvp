@@ -34,7 +34,7 @@ namespace vp.Services.Settings
                 return PlaylistCollection.FirstOrDefault(p =>
                            p.PlaylistTitle == _serializer
                                .Deserialize<Playlist>(Properties.UserSettings.Default.LastPlayedPlaylist)
-                               .PlaylistTitle) ?? new Playlist();
+                               .PlaylistTitle);
             }
             set => Properties.UserSettings.Default.LastPlayedPlaylist = _serializer.Serialize(value);
         }
