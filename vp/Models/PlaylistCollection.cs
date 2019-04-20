@@ -21,7 +21,6 @@ namespace vp.Models
         public new void Add(Playlist playlist)
         {
             base.Add(playlist);
-            //TODO check if needed: playlist.Videos.ListChanged += (sender, args) => this.OnListChanged(args);
         }
 
         /// <summary>
